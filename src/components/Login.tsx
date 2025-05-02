@@ -54,46 +54,18 @@ const Login = () => {
     }
   };
 
-  // // 학번 이메일을 통한 인증 코드 전송
-  // const postData: () => Promise<void> = async () => {
-  //   try {
-  //     const res = await axios.post(
-  //       "http://15.164.227.179:3000/api-docs/user/mailCode",
-  //       {
-  //         mail: `${studentId}@sangmyung.kr`,
-  //       }
-  //     );
-  //     console.log("인증 코드 전송 성공:", res.data);
-  //   } catch (error) {
-  //     console.error("인증 코드 전송 실패: ", error);
-  //   }
-  // };
   // 학번 이메일을 통한 인증 코드 전송
   const postData: () => Promise<void> = async () => {
     try {
-      const response = await fetch(
-        `http://15.164.227.179:3000/api-docs/user/${studentId}@sangmyung.kr`,
+      const res = await axios.post(
+        "http://15.164.227.179:3000/user/mailCode",
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            mail: `${studentId}@sangmyung.kr`,
-          }),
+          mail: `${studentId}@sangmyung.kr`,
         }
       );
-
-      if (!response.ok) {
-        throw new Error(
-          `HTTP error! status: ${response.status}`
-        );
-      }
-
-      const data = await response.json();
-      console.log("인증 코드 전송 성공:", data);
+      console.log("인증 코드 전송 성공:", res.data);
     } catch (error) {
-      console.error("인증 코드 전송 실패:", error);
+      console.error("인증 코드 전송 실패: ", error);
     }
   };
 
@@ -151,8 +123,8 @@ const Login = () => {
                 onClick={handleSubmitStudentId}
                 disabled={!isStudentIdValid(studentId)}
               >
-                {/* {buttonText} */}
-                전송하기
+                {buttonText}
+                {/* 전송하기 */}
               </button>
             </div>
           </>
