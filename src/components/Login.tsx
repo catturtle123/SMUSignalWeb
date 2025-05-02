@@ -130,7 +130,7 @@ const Login = () => {
           </>
         );
 
-      // 초기 화면 이후(학번 입력 후)
+      // 초기 화면 이후(학번 입력 후 - 메일 인증 성공)
       case LoginStep.VerificationCodeInput:
         return (
           <>
@@ -190,6 +190,7 @@ const Login = () => {
           </>
         );
 
+      // 초기 화면 이후(학번 입력 후 - 메일 인증 실패)
       case LoginStep.InvalidVerificationCode:
         return (
           <>
