@@ -1,0 +1,157 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: white;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.login-header h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.login-header p {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.input-container {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.student-id-input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.student-id-input.error {
+  border-color: #ff4d4f;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button.active {
+  background-color: #4364f7;
+  color: white;
+}
+
+.submit-button.inactive {
+  background-color: #e1eaf8;
+  color: white;
+  cursor: not-allowed;
+}
+
+.student-id-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.student-id-display span {
+  font-size: 1rem;
+  color: #333;
+}
+
+.resend-button {
+  background-color: #e1eaf8;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.resend-button:disabled {
+  cursor: not-allowed;
+}
+
+.verification-info {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.email-info {
+  font-size: 0.8rem;
+  color: #5271ff;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.verification-code-input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.verification-code-input.error {
+  border-color: #ff4d4f;
+}
+
+.code-length-info {
+  font-size: 0.75rem;
+  color: #999;
+  margin-bottom: 1rem;
+}
+
+.code-error-info {
+  font-size: 0.75rem;
+  color: #ff4d4f;
+  margin-bottom: 1rem;
+}
+
+.confirm-button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.confirm-button.active {
+  background-color: #4364f7;
+  color: white;
+}
+
+.confirm-button.inactive {
+  background-color: #e1eaf8;
+  color: white;
+  cursor: not-allowed;
+} 
