@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./Login.module.css";
+import axios from "axios";
 
 enum LoginStep {
   StudentIDInput = 1,
@@ -15,8 +15,7 @@ const Login = () => {
   const [loginStep, setLoginStep] = useState<LoginStep>(
     LoginStep.StudentIDInput
   );
-  const [studentId, setStudentId] =
-    useState<string>("202010914");
+  const [studentId, setStudentId] = useState<string>("");
   const [verificationCode, setVerificationCode] =
     useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -55,12 +54,56 @@ const Login = () => {
     }
   };
 
+  // // 학번 이메일을 통한 인증 코드 전송
+  // const postData: () => Promise<void> = async () => {
+  //   try {
+  //     const res = await axios.post(
+  //       "http://15.164.227.179:3000/api-docs/user/mailCode",
+  //       {
+  //         mail: `${studentId}@sangmyung.kr`,
+  //       }
+  //     );
+  //     console.log("인증 코드 전송 성공:", res.data);
+  //   } catch (error) {
+  //     console.error("인증 코드 전송 실패: ", error);
+  //   }
+  // };
+  // 학번 이메일을 통한 인증 코드 전송
+  const postData: () => Promise<void> = async () => {
+    try {
+      const response = await fetch(
+        `http://15.164.227.179:3000/api-docs/user/${studentId}@sangmyung.kr`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            mail: `${studentId}@sangmyung.kr`,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `HTTP error! status: ${response.status}`
+        );
+      }
+
+      const data = await response.json();
+      console.log("인증 코드 전송 성공:", data);
+    } catch (error) {
+      console.error("인증 코드 전송 실패:", error);
+    }
+  };
+
   // 학번 제출 핸들러
   const handleSubmitStudentId = () => {
     if (isStudentIdValid(studentId)) {
       setLoginStep(LoginStep.VerificationCodeInput);
       setButtonText("전송 완료");
       setIsSubmitted(true);
+      postData();
     } else {
       setLoginStep(LoginStep.InvalidStudentID);
     }
@@ -78,64 +121,69 @@ const Login = () => {
   // 조건에 따라 로그인 단계 렌더링
   const renderLoginStep = () => {
     switch (loginStep) {
+      // 초기 화면
       case LoginStep.StudentIDInput:
         return (
           <>
-            <div className={styles["login-header"]}>
-              <h1>로그인</h1>
-              <p>
+            <div className="text-center mb-8 w-full">
+              <h1 className="text-xl font-bold mb-4">로그인</h1>
+              <p className="text-sm text-gray-600 leading-relaxed">
                 학번만 기재할 경우,
                 <br />
                 메일주소가 자동으로 반영되어서 전송됩니다.
               </p>
             </div>
-            <div className={styles["input-container"]}>
+            <div className="flex items-center gap-2 mb-4">
               <input
                 type="text"
                 value={studentId}
                 onChange={handleStudentIdChange}
                 maxLength={9}
                 placeholder="학번을 입력하세요"
-                className={styles["student-id-input"]}
+                className="w-[129px] h-[28px] py-3 px-3 border border-gray-300 rounded-md text-[12px] text-center"
               />
               <button
-                className={`${styles["submit-button"]} ${
+                className={`w-[136px] h-[36px] text-center text-[12px] rounded-md transition-colors ${
                   isStudentIdValid(studentId)
-                    ? styles["active"]
-                    : styles["inactive"]
+                    ? "bg-[#4364f7] text-white cursor-pointer"
+                    : "bg-[#e1eaf8] text-white cursor-not-allowed"
                 }`}
                 onClick={handleSubmitStudentId}
                 disabled={!isStudentIdValid(studentId)}
               >
-                {buttonText}
+                {/* {buttonText} */}
+                전송하기
               </button>
             </div>
           </>
         );
 
+      // 초기 화면 이후(학번 입력 후)
       case LoginStep.VerificationCodeInput:
         return (
           <>
-            <div className={styles["login-header"]}>
-              <h1>로그인</h1>
-              <p>
+            <div className="text-center mb-8 w-full">
+              <h1 className="text-xl font-bold mb-4">로그인</h1>
+              <p className="text-sm text-gray-600 leading-relaxed">
                 학번만 기재할 경우,
                 <br />
                 메일주소가 자동으로 반영되어서 전송됩니다.
               </p>
             </div>
-            <div className={styles["student-id-display"]}>
-              <span>{studentId}</span>
+            <div className="flex justify-between items-center w-full mb-4 py-3 px-3 border border-gray-300 rounded-md">
+              <span className="text-base text-gray-800">
+                {studentId}
+              </span>
               <button
-                className={styles["resend-button"]}
+                className="bg-[#e1eaf8] text-white py-2 px-4 rounded-md cursor-pointer disabled:cursor-not-allowed"
                 onClick={() => setIsSubmitted(false)}
                 disabled={isSubmitted}
               >
                 전송 {isSubmitted ? "완료" : "하기"}
               </button>
             </div>
-            <div className={styles["verification-info"]}>
-              <p className={styles["email-info"]}>
+            <div className="w-full mb-4">
+              <p className="text-sm text-[#5271ff] mb-4 leading-relaxed">
                 {studentId}@sangmyung.kr로
                 <br />
                 인증번호를 전송했습니다.
@@ -148,17 +196,17 @@ const Login = () => {
                 onChange={handleVerificationCodeChange}
                 maxLength={6}
                 placeholder="인증코드 6자리"
-                className={styles["verification-code-input"]}
+                className="w-full py-3 px-3 mb-2 border border-gray-300 rounded-md text-base text-center"
               />
-              <p className={styles["code-length-info"]}>
+              <p className="text-xs text-gray-500 mb-4">
                 인증코드는 6자리입니다.
               </p>
             </div>
             <button
-              className={`${styles["confirm-button"]} ${
+              className={`w-full py-3 text-base rounded-md transition-colors ${
                 isVerificationCodeValid(verificationCode)
-                  ? styles["active"]
-                  : styles["inactive"]
+                  ? "bg-[#4364f7] text-white cursor-pointer"
+                  : "bg-[#e1eaf8] text-white cursor-not-allowed"
               }`}
               onClick={handleVerifyCode}
               disabled={
@@ -173,26 +221,28 @@ const Login = () => {
       case LoginStep.InvalidVerificationCode:
         return (
           <>
-            <div className={styles["login-header"]}>
-              <h1>로그인</h1>
-              <p>
+            <div className="text-center mb-8 w-full">
+              <h1 className="text-xl font-bold mb-4">로그인</h1>
+              <p className="text-sm text-gray-600 leading-relaxed">
                 학번만 기재할 경우,
                 <br />
                 메일주소가 자동으로 반영되어서 전송됩니다.
               </p>
             </div>
-            <div className={styles["student-id-display"]}>
-              <span>{studentId}</span>
+            <div className="flex justify-between items-center w-full mb-4 py-3 px-3 border border-gray-300 rounded-md">
+              <span className="text-base text-gray-800">
+                {studentId}
+              </span>
               <button
-                className={styles["resend-button"]}
+                className="bg-[#e1eaf8] text-white py-2 px-4 rounded-md cursor-pointer disabled:cursor-not-allowed"
                 onClick={() => setIsSubmitted(false)}
                 disabled={isSubmitted}
               >
                 전송 {isSubmitted ? "완료" : "하기"}
               </button>
             </div>
-            <div className={styles["verification-info"]}>
-              <p className={styles["email-info"]}>
+            <div className="w-full mb-4">
+              <p className="text-sm text-[#5271ff] mb-4 leading-relaxed">
                 {studentId}@sangmyung.kr로
                 <br />
                 인증번호를 전송했습니다.
@@ -205,17 +255,17 @@ const Login = () => {
                 onChange={handleVerificationCodeChange}
                 maxLength={6}
                 placeholder="인증코드 6자리"
-                className={`${styles["verification-code-input"]} ${styles["error"]}`}
+                className="w-full py-3 px-3 mb-2 border border-[#ff4d4f] rounded-md text-base text-center"
               />
-              <p className={styles["code-error-info"]}>
+              <p className="text-xs text-[#ff4d4f] mb-4">
                 유효한 인증코드가 아닙니다!
               </p>
             </div>
             <button
-              className={`${styles["confirm-button"]} ${
+              className={`w-full py-3 text-base rounded-md transition-colors ${
                 isVerificationCodeValid(verificationCode)
-                  ? styles["active"]
-                  : styles["inactive"]
+                  ? "bg-[#4364f7] text-white cursor-pointer"
+                  : "bg-[#e1eaf8] text-white cursor-not-allowed"
               }`}
               onClick={handleVerifyCode}
               disabled={
@@ -229,9 +279,9 @@ const Login = () => {
 
       default:
         return (
-          <div className={styles["login-header"]}>
-            <h1>로그인</h1>
-            <p>
+          <div className="text-center mb-8 w-full">
+            <h1 className="text-xl font-bold mb-4">로그인</h1>
+            <p className="text-sm text-gray-600 leading-relaxed">
               학번만 기재할 경우,
               <br />
               메일주소가 자동으로 반영되어서 전송됩니다.
@@ -242,7 +292,7 @@ const Login = () => {
   };
 
   return (
-    <div className={styles["login-container"]}>
+    <div className="flex flex-col items-center justify-start min-h-screen p-8 bg-white max-w-[500px] mx-auto">
       {renderLoginStep()}
     </div>
   );
