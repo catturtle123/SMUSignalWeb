@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "../pages/main/Mainpage";
+import Login from "../components/Login";
 
 function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/main" element={<MainPage />} />
-        {/* 다른 페이지도 나중에 여기 추가 */}
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
