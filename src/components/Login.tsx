@@ -105,17 +105,17 @@ const Login = () => {
                 메일주소가 자동으로 반영되어서 전송됩니다.
               </p>
             </div>
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex justify-between items-center w-full mb-4 py-3 px-3 border border-gray-300 rounded-md">
               <input
                 type="text"
                 value={studentId}
                 onChange={handleStudentIdChange}
                 maxLength={9}
                 placeholder="학번을 입력하세요"
-                className="w-[129px] h-[28px] py-3 px-3 border border-gray-300 rounded-md text-[12px] text-center"
+                className="w-[129px] h-[28px] py-3 px-3 text-[20px] text-center"
               />
               <button
-                className={`w-[136px] h-[36px] text-center text-[12px] rounded-md transition-colors ${
+                className={`w-[136px] h-[36px] text-center text-[16px] rounded-md transition-colors ${
                   isStudentIdValid(studentId)
                     ? "bg-[#4364f7] text-white cursor-pointer"
                     : "bg-[#e1eaf8] text-white cursor-not-allowed"
@@ -265,7 +265,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen p-8 bg-white max-w-[500px] mx-auto">
+    <div className="flex flex-col items-center justify-start min-h-screen pt-8 bg-white max-w-[600px] mx-auto">
       {renderLoginStep()}
     </div>
   );
