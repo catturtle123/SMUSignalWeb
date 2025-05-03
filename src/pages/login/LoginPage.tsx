@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 enum LoginStep {
@@ -12,6 +13,7 @@ enum LoginStep {
 }
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [loginStep, setLoginStep] = useState<LoginStep>(
     LoginStep.StudentIDInput
   );
@@ -123,6 +125,7 @@ const LoginPage = () => {
       if (res.data.token) {
         document.cookie = `authToken=${res.data.token}; path=/`;
         console.log("토큰 저장 완료:", res.data.token);
+        navigate("/singup");
       }
     } catch (error: any) {
       if (error.response) {
@@ -212,7 +215,7 @@ const LoginPage = () => {
                 className="w-[135px] h-[28px] py-3 px-3 text-[20px] text-center placeholder:text-[14px] font-semibold"
               />
               <button
-                className={`w-[136px] h-[40px] text-center text-[16px] font-semibold rounded-md transition-colors ${
+                className={`w-[136px] h-[45px] text-center text-[16px] font-semibold rounded-md transition-colors ${
                   isStudentIdValid(studentId)
                     ? "bg-[#4364f7] text-white cursor-pointer"
                     : "bg-[#e1eaf8] text-white cursor-not-allowed"
@@ -246,7 +249,7 @@ const LoginPage = () => {
                 {studentId}
               </span>
               <button
-                className="w-[136px] h-[40px] text-center text-[16px] font-semibold rounded-md transition-colors bg-[#e1eaf8] text-white cursor-pointer disabled:cursor-not-allowed"
+                className="w-[136px] h-[45px] text-center text-[16px] font-semibold rounded-md transition-colors bg-[#e1eaf8] text-white cursor-pointer disabled:cursor-not-allowed"
                 onClick={() => setIsSubmitted(false)}
                 disabled={isSubmitted}
               >
@@ -286,65 +289,65 @@ const LoginPage = () => {
           </>
         );
 
-      // 초기 화면 이후(학번 입력 후 - 인증 코드 실패)
-      case LoginStep.InvalidVerificationCode:
-        return (
-          <>
-            <div className="text-center mb-8 w-full">
-              <h1 className="text-xl font-bold mb-4">로그인</h1>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                학번만 기재할 경우,
-                <br />
-                메일주소가 자동으로 반영되어서 전송됩니다.
-              </p>
-            </div>
-            <div className="flex justify-between items-center w-full mb-4 py-3 px-3 border border-gray-300 rounded-md">
-              <span className="text-base text-gray-800">
-                {studentId}
-              </span>
-              <button
-                className="bg-[#e1eaf8] text-white py-2 px-4 rounded-md cursor-pointer disabled:cursor-not-allowed"
-                onClick={() => setIsSubmitted(false)}
-                disabled={isSubmitted}
-              >
-                전송 {isSubmitted ? "완료" : "하기"}
-              </button>
-            </div>
-            <div className="w-full mb-4">
-              <p className="text-sm text-[#5271ff] mb-4 leading-relaxed">
-                {studentId}@sangmyung.kr로
-                <br />
-                인증번호를 전송했습니다.
-                <br />
-                스팸 메일함도 확인해주세요
-              </p>
-              <input
-                type="text"
-                value={verificationCode}
-                onChange={handleVerificationCodeChange}
-                maxLength={6}
-                placeholder="인증코드 6자리"
-                className="w-full py-3 px-3 mb-2 border border-[#ff4d4f] rounded-md text-base text-center"
-              />
-              <p className="text-xs text-[#ff4d4f] mb-4">
-                유효한 인증코드가 아닙니다!
-              </p>
-            </div>
-            <button
-              className={`w-full py-3 text-base rounded-md transition-colors ${
-                isVerificationCodeValid(verificationCode)
-                  ? "bg-[#4364f7] text-white cursor-pointer"
-                  : "bg-[#e1eaf8] text-white cursor-not-allowed"
-              }`}
-              onClick={handleVerifyCode}
-              disabled={
-                !isVerificationCodeValid(verificationCode)
-              }
-            >
-              확인
-            </button>
-          </>
-        );
+      // // 초기 화면 이후(학번 입력 후 - 인증 코드 실패)
+      // case LoginStep.InvalidVerificationCode:
+      //   return (
+      //     <>
+      //       <div className="text-center mb-8 w-full">
+      //         <h1 className="text-xl font-bold mb-4">로그인</h1>
+      //         <p className="text-sm text-gray-600 leading-relaxed">
+      //           학번만 기재할 경우,
+      //           <br />
+      //           메일주소가 자동으로 반영되어서 전송됩니다.
+      //         </p>
+      //       </div>
+      //       <div className="flex justify-between items-center w-full mb-4 py-3 px-3 border border-gray-300 rounded-md">
+      //         <span className="text-base text-gray-800">
+      //           {studentId}
+      //         </span>
+      //         <button
+      //           className="bg-[#e1eaf8] text-white py-2 px-4 rounded-md cursor-pointer disabled:cursor-not-allowed"
+      //           onClick={() => setIsSubmitted(false)}
+      //           disabled={isSubmitted}
+      //         >
+      //           전송 {isSubmitted ? "완료" : "하기"}
+      //         </button>
+      //       </div>
+      //       <div className="w-full mb-4">
+      //         <p className="text-sm text-[#5271ff] mb-4 leading-relaxed">
+      //           {studentId}@sangmyung.kr로
+      //           <br />
+      //           인증번호를 전송했습니다.
+      //           <br />
+      //           스팸 메일함도 확인해주세요
+      //         </p>
+      //         <input
+      //           type="text"
+      //           value={verificationCode}
+      //           onChange={handleVerificationCodeChange}
+      //           maxLength={6}
+      //           placeholder="인증코드 6자리"
+      //           className="w-full py-3 px-3 mb-2 border border-[#ff4d4f] rounded-md text-base text-center"
+      //         />
+      //         <p className="text-xs text-[#ff4d4f] mb-4">
+      //           유효한 인증코드가 아닙니다!
+      //         </p>
+      //       </div>
+      //       <button
+      //         className={`w-full py-3 text-base rounded-md transition-colors ${
+      //           isVerificationCodeValid(verificationCode)
+      //             ? "bg-[#4364f7] text-white cursor-pointer"
+      //             : "bg-[#e1eaf8] text-white cursor-not-allowed"
+      //         }`}
+      //         onClick={handleVerifyCode}
+      //         disabled={
+      //           !isVerificationCodeValid(verificationCode)
+      //         }
+      //       >
+      //         확인
+      //       </button>
+      //     </>
+      //   );
 
       default:
         return (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import maleIcon from "../../assets/female.png";
-import femaleIcon from "../../assets/male.png";
+import femaleIcon from "../../assets/female.png";
+import maleIcon from "../../assets/male.png";
 
 type Gender = "male" | "female" | null;
 
