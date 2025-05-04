@@ -109,6 +109,107 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const checkUserStatus: () => Promise<void> = async () => {
+    try {
+      const authToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("authToken="))
+        ?.split("=")[1];
+
+      if (!authToken) {
+        alert("인증 토큰이 없습니다. 다시 로그인해주세요.");
+        navigate("/login");
+        return;
+      }
+
+      const res = await axios.get(
+        "http://15.164.227.179:3000/frontFunc/operationFront",
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      console.log(res);
+
+      if (res.status === 200) {
+        console.log("회원가입 완료된 유저입니다.");
+        navigate("/main"); // 회원가입 완료된 유저는 MainPage로 이동
+      } else {
+        console.log("회원가입이 완료되지 않은 유저입니다.");
+        navigate("/signup"); // 회원가입이 완료되지 않은 유저는 SignupPage로 이동
+      }
+    } catch (error: any) {
+      if (error.response) {
+        const { status, data } = error.response;
+
+        switch (status) {
+          case 400:
+            console.error(
+              `회원가입 상태 확인 실패: ${status}, ${
+                data.message ||
+                "회원 정보를 입력하지 않은 유저입니다."
+              }`
+            );
+            alert(
+              "회원 정보를 입력하지 않은 유저입니다. 회원가입을 진행해주세요."
+            );
+            navigate("/signup");
+            break;
+
+          case 401:
+            console.error(
+              `회원가입 상태 확인 실패: ${status}, ${
+                data.message || "인증 오류가 발생했습니다."
+              }`
+            );
+            alert(
+              "인증 오류가 발생했습니다. 다시 로그인해주세요."
+            );
+            navigate("/login");
+            break;
+
+          case 403:
+            console.error(
+              `회원가입 상태 확인 실패: ${status}, ${
+                data.message || "만료된 토큰입니다."
+              }`
+            );
+            alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+            navigate("/login");
+            break;
+
+          case 500:
+            console.error(
+              `회원가입 상태 확인 실패: ${status}, ${
+                data.message || "서버 오류가 발생했습니다."
+              }`
+            );
+            alert(
+              "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+            );
+            break;
+
+          default:
+            console.error(
+              `회원가입 상태 확인 실패: ${status}, ${
+                data.message || "알 수 없는 오류가 발생했습니다."
+              }`
+            );
+            alert(
+              "알 수 없는 오류가 발생했습니다. 다시 시도해주세요."
+            );
+            break;
+        }
+      } else {
+        console.error("회원가입 상태 확인 실패:", error.message);
+        alert(
+          "네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요."
+        );
+      }
+    }
+  };
+
   // 인증 코드 검증 및 토큰 발급 api
   const verifyCode: () => Promise<void> = async () => {
     try {
@@ -125,7 +226,9 @@ const LoginPage: React.FC = () => {
       if (res.data.token) {
         document.cookie = `authToken=${res.data.token}; path=/`;
         console.log("토큰 저장 완료:", res.data.token);
-        navigate("/signup");
+
+        // 회원가입 상태 확인
+        await checkUserStatus();
       }
     } catch (error: any) {
       if (error.response) {
