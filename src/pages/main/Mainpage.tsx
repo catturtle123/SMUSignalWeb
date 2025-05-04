@@ -1,81 +1,263 @@
-import React from "react";
+import React, { useEffect, useState, FormEvent } from "react";
+import axios, { AxiosError } from "axios";
 
 function MainPage() {
+  const [instaId, setInstaId] = useState("...");
+  const [rerollCount, setRerollCount] = useState(0);
+  const [referralCode, setReferralCode] = useState("...");
+  const [inputCode, setInputCode] = useState("");
+  const [codeMessage, setCodeMessage] = useState("");
+  const [codeColor, setCodeColor] = useState("#B4A5FE");
+
+  const token =
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJzdHVkZW50X2lkIjoidGVzdCIsImlhdCI6MTc0NjI1OTk5NiwiZXhwIjoxNzQ2NDMyNzk2fQ.sOO3geDGVjrfUeeeZOE6anAjTvrXXWLnAYCn6HJUp2g";
+
+  const isCodeValid = inputCode.length === 6 || inputCode.length === 8;
+
+  const fetchReroll = async () => {
+    try {
+      const response = await axios.get(
+        "http://15.164.227.179:3000/serialCode/myReroll",
+        { headers: { Authorization: token } }
+      );
+      setRerollCount(response.data.result ?? 0);
+    } catch (error) {
+      console.error("리롤 횟수 불러오기 실패", error);
+      setRerollCount(0);
+    }
+  };
+
+  useEffect(() => {
+    const fetchInstagram = async () => {
+      try {
+        const response = await axios.get(
+          "http://15.164.227.179:3000/user/getMyIns",
+          { headers: { Authorization: token } }
+        );
+        const id = response.data.result || "unknown";
+        const trimmed = id.length > 7 ? id.slice(0, 7) + "..." : id;
+        setInstaId(trimmed);
+      } catch (error) {
+        console.error("인스타 ID 불러오기 실패", error);
+        setInstaId("unknown");
+      }
+    };
+
+    const fetchReferralCode = async () => {
+      try {
+        const response = await axios.get(
+          "http://15.164.227.179:3000/referral/getMyReferralCode",
+          { headers: { Authorization: token } }
+        );
+        setReferralCode(response.data.result || "없음");
+      } catch (error) {
+        console.error("추천인 코드 불러오기 실패", error);
+        setReferralCode("없음");
+      }
+    };
+
+    fetchInstagram();
+    fetchReroll();
+    fetchReferralCode();
+  }, []);
+
+  const handleMatchClick = async () => {
+    if (rerollCount === 0) {
+      alert("리롤 횟수가 없습니다. 먼저 리롤을 시도하세요.");
+      return;
+    }
+    try {
+      const response = await axios.get("http://15.164.227.179:3000/frontFunc/frontReroll", {
+        headers: { Authorization: token },
+      });
+      const matchedInsta = response.data.instagram_id;
+      if (matchedInsta) {
+        window.open(`https://instagram.com/${matchedInsta}`, "_blank");
+        await fetchReroll();
+      } else {
+        alert("매칭된 인스타 ID가 없습니다.");
+      }
+    } catch (error) {
+      console.error("매칭 실패", error);
+      alert("매칭된 상대를 불러오는 데 실패했습니다.");
+    }
+  };
+
+  const handleCopyReferralCode = () => {
+    navigator.clipboard.writeText(referralCode).then(() => {
+      alert("추천인 코드가 복사되었습니다.");
+    }).catch(err => {
+      console.error("복사 실패", err);
+    });
+  };
+
+  const handleCodeSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const trimmedCode = inputCode.trim();
+    if (!trimmedCode) {
+      setCodeMessage("6자리 추천인 코드 혹은 8자리 시리얼 코드를 입력해주세요.");
+      setCodeColor("#664BFF");
+      return;
+    }
+
+    if (trimmedCode.length === 6) {
+      try {
+        await axios.patch(
+          "http://15.164.227.179:3000/referral/findReferralCode",
+          { referralCode: trimmedCode },
+          { headers: { Authorization: token } }
+        );
+        setCodeMessage("추천인 코드가 적용되었습니다.");
+        setCodeColor("#664BFF");
+        await fetchReroll();
+      } catch (error: unknown) {
+        const axiosError = error as AxiosError<{ message: string }>;
+        const status = axiosError.response?.status;
+        const msg = axiosError.response?.data?.message || "오류 발생";
+
+        let finalMsg = msg;
+        if (status === 409) {
+          finalMsg = "이미 사용된 추천인 코드입니다.";
+        } else if (msg.includes("올바르지") || msg.includes("유효하지") || msg.includes("없")) {
+          finalMsg = "올바르지 않은 추천인 코드입니다.";
+        }
+
+        setCodeMessage(finalMsg);
+        setCodeColor("#FF6677");
+      }
+    } else if (trimmedCode.length === 8) {
+      try {
+        await axios.patch(
+          "http://15.164.227.179:3000/serialCode/insertCode",
+          { serialCode: trimmedCode },
+          { headers: { Authorization: token } }
+        );
+        setCodeMessage("시리얼 코드가 적용되었습니다.");
+        setCodeColor("#664BFF");
+        await fetchReroll();
+      } catch (error: unknown) {
+        const axiosError = error as AxiosError<{ message: string }>;
+        const msg = axiosError.response?.data?.message || "오류 발생";
+        const finalMsg = msg.includes("이미") ? "이미 사용된 시리얼 코드입니다." : "올바르지 않은 시리얼 코드입니다.";
+        setCodeMessage(finalMsg);
+        setCodeColor("#FF6677");
+      }
+    } else {
+      setCodeMessage("6자리 추천인 코드 혹은 8자리 시리얼 코드를 입력해주세요.");
+      setCodeColor("#664BFF");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#4D6FFF] text-white px-6 py-8 space-y-6">
-      {/* 유저 정보 영역 */}
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-sm font-light">@daemon 님</p>
-          <p className="text-lg font-semibold">
-            스뮤시그널에 오신 것을 환영합니다!
-          </p>
-        </div>
-        <div>
-          {/* 설정 아이콘 자리 */}
-          <button>
-            <img
-              src="/icons/settings.svg"
-              alt="설정"
-              className="w-6 h-6"
-            />
-          </button>
-        </div>
-      </div>
-
-      {/* 리롤 횟수 */}
-      <div className="bg-white text-black rounded-full px-4 py-2 text-sm font-semibold w-fit">
-        <span className="text-[#4D6FFF] font-bold mr-2">12</span>
-        당신의 남은 리롤 횟수
-      </div>
-
-      {/* 매칭 시작 카드 */}
-      <div className="bg-[#3C57E8] rounded-2xl p-5 flex justify-between items-center">
-        <div>
-          <p className="text-lg font-semibold">매칭 시작</p>
-          <p className="text-sm opacity-80">
-            당신의 짝을 보고 싶을 때
-          </p>
-        </div>
-        {/* 하트 이미지 자리 */}
-        <img
-          src="/images/hearts.png"
-          alt="하트"
-          className="w-14 h-14"
-        />
-      </div>
-
-      {/* 추천 코드 표시 */}
-      <div className="bg-[#6741FF] rounded-xl p-4 flex items-center justify-between">
-        <div className="text-lg font-semibold">
-          내 추천인 코드
-        </div>
-        <div className="text-white text-xl font-bold">
-          KJ232A
-        </div>
-        <img
-          src="/icons/copy.svg"
-          alt="복사"
-          className="w-6 h-6"
-        />
-      </div>
-
-      {/* 추천 코드 입력 영역 */}
-      <div>
-        <div className="flex items-center bg-white rounded-full overflow-hidden border border-red-500">
-          <input
-            type="text"
-            placeholder="추천 코드 입력"
-            className="px-4 py-2 w-full text-black outline-none"
-            defaultValue="cdasda"
+    <div className="w-screen min-h-screen bg-[#4B66FF] text-white flex justify-center">
+      <div className="w-full max-w-[768px] flex flex-col min-h-screen">
+        {/* 상단 */}
+        <div className="px-4 sm:px-6 py-6 pt-10 space-y-6 relative">
+          <img
+            src="src/assets/settings.svg"
+            alt="설정"
+            className="w-6 h-6 sm:w-7 sm:h-7 absolute top-4 right-4"
           />
-          <button className="bg-[#4D6FFF] text-white px-4 py-2 font-semibold">
-            확인
-          </button>
+
+          <div className="flex items-center justify-between">
+            <div className="leading-[20px]">
+              <p className="font-pretendard font-bold text-[24px] leading-[20px] tracking-[-0.5px]">
+                @{instaId}
+                <span className="ml-1 text-[#B4CFF5]">님</span>
+              </p>
+              <p className="font-pretendard font-bold text-[16px] leading-[20px] tracking-[-0.5px] mt-2 text-[#B4CFF5]">
+                스뮤시그널에 <br /> 오신 것을 환영합니다!
+              </p>
+            </div>
+            <img
+              src="src/assets/ghost.svg"
+              alt="귀신"
+              className="w-30 h-30 sm:w-32 sm:h-32 md:w-36 md:h-36"
+            />
+          </div>
+
+          <div className="bg-white text-black rounded-[32px] px-4 py-3 text-sm sm:text-base font-bold w-full flex items-center">
+            <div className="bg-[#4D6FFF] text-white rounded-[32px] px-3 py-1 mr-3 text-sm">
+              {rerollCount}
+            </div>
+            당신의 남은 리롤 횟수
+          </div>
         </div>
-        <p className="text-sm text-red-500 mt-2">
-          이미 사용된 추천인 코드입니다.
-        </p>
+
+        {/* 하단 */}
+        <div className="flex-1 w-full bg-white text-black rounded-t-3xl px-4 sm:px-6 pt-6 pb-10 space-y-6 relative">
+          <div
+            className="bg-[#3C57E8] text-white rounded-[32px] p-4 sm:p-6 relative overflow-hidden flex items-center justify-between cursor-pointer"
+            onClick={handleMatchClick}
+          >
+            <div className="z-10">
+              <p className="text-lg sm:text-xl font-semibold">매칭 시작</p>
+              <p className="text-sm sm:text-base opacity-80">당신의 짝을 보고 싶을 때</p>
+            </div>
+            <div className="relative w-[140px] h-[100px] sm:w-[100px] sm:h-[100px] flex-shrink-0">
+              <img
+                src="src/assets/redheart.svg"
+                alt="레드 하트"
+                className="absolute top-11 left-6 w-[100%] h-[80%] object-contain z-0"
+              />
+              <img
+                src="src/assets/goldheart.svg"
+                alt="골드 하트"
+                className="absolute top-12 right-3 w-[100%] h-[86%] object-contain z-0"
+              />
+            </div>
+          </div>
+
+          <div className="bg-[#6741FF] rounded-[32px] p-4 text-white space-y-2 relative">
+            <div className="text-sm sm:text-lg">내 추천인 코드</div>
+            <div className="flex justify-between items-center">
+              <div className="text-lg sm:text-xl font-bold">{referralCode}</div>
+              <img
+                src="src/assets/document.svg"
+                alt="복사"
+                onClick={handleCopyReferralCode}
+                className="cursor-pointer w-10 h-10 sm:w-10 sm:h-10 absolute right-4 top-1/2 transform -translate-y-1/2"
+              />
+            </div>
+          </div>
+
+          <form
+            className="flex flex-col sm:flex-row items-center bg-white border-2 rounded-[32px] overflow-hidden w-full h-[72px] mx-auto relative"
+            style={{ borderColor: codeColor }}
+            onSubmit={handleCodeSubmit}
+          >
+            <input
+              type="text"
+              value={inputCode}
+              onChange={(e) => {
+                const val = e.target.value;
+                setInputCode(val);
+                if (val.length > 0 && val.length !== 6 && val.length !== 8) {
+                  setCodeMessage("6자리 추천인 코드 혹은 8자리 시리얼 코드를 입력해주세요.");
+                  setCodeColor("#664BFF");
+                } else {
+                  setCodeMessage("");
+                }
+              }}
+              className="px-4 py-2 w-full text-black outline-none text-sm sm:text-base font-semibold h-full flex items-center"
+              style={{ lineHeight: "normal" }}
+            />
+            <button
+              type="submit"
+              disabled={!isCodeValid}
+              className="absolute top-[18px] right-[16px] w-[79px] h-[36px] rounded-full flex items-center justify-center disabled:opacity-50"
+              style={{ backgroundColor: isCodeValid ? "#664BFF" : "#B4A5FE", cursor: isCodeValid ? "pointer" : "default" }}
+            >
+              <span className="text-white text-sm font-semibold">확인</span>
+            </button>
+          </form>
+
+          <p className="text-sm mt-2 text-center" style={{ color: codeColor }}>
+            {codeMessage}
+          </p>
+        </div>
+
+        <div className="flex-1 bg-[#4D6FFF]"></div>
       </div>
     </div>
   );
