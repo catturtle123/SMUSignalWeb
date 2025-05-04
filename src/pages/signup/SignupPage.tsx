@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import femaleIcon from "../../assets/female.png";
 import maleIcon from "../../assets/male.png";
 import axios from "axios";
@@ -11,6 +12,7 @@ const SignupPage: React.FC = () => {
     useState<Gender>(null);
   const [clickedGender, setClickedGender] = useState<Cg>(false);
   const [instagramId, setInstagramId] = useState("");
+  const navigate = useNavigate();
 
   const handleGenderSelect = (gender: "male" | "female") => {
     if (selectedGender === gender) {
@@ -46,10 +48,11 @@ const SignupPage: React.FC = () => {
           },
         }
       );
-      console.log("res", res);
       console.log("회원가입 성공", res.data.message);
-
       alert("회원가입이 완료되었습니다!");
+
+      // 회원가입 성공 했다? 메인으로 이동시켜
+      navigate("/main");
     } catch (error: any) {
       if (error.response) {
         const { status, data } = error.response;
