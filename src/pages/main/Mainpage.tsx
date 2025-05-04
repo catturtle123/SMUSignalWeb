@@ -146,7 +146,6 @@ function MainPage() {
     }
   };
 
-  
   return (
     <div className="w-screen min-h-screen bg-[#4B66FF] text-white flex justify-center">
       <div className="w-full max-w-[768px] flex flex-col min-h-screen">
@@ -183,7 +182,7 @@ function MainPage() {
         </div>
 
         {/* 하단 */}
-        <div className="flex-1 w-full bg-white text-black rounded-t-3xl px-4 sm:px-6 pt-6 pb-10 space-y-6 relative">
+        <div className="flex-1 w-full bg-white text-black rounded-t-3xl px-4 sm:px-6 pt-6 pb-10 space-y-6 flex flex-col">
           <div
             className="bg-[#3C57E8] text-white rounded-[32px] p-4 sm:p-6 relative overflow-hidden flex items-center justify-between cursor-pointer"
             onClick={handleMatchClick}
@@ -254,8 +253,6 @@ function MainPage() {
             {codeMessage}
           </p>
         </div>
-
-        <div className="flex-1 bg-[#4D6FFF]"></div>
       </div>
     </div>
   );
