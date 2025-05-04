@@ -125,7 +125,7 @@ const LoginPage = () => {
       if (res.data.token) {
         document.cookie = `authToken=${res.data.token}; path=/`;
         console.log("토큰 저장 완료:", res.data.token);
-        navigate("/singup");
+        navigate("/signup");
       }
     } catch (error: any) {
       if (error.response) {
