@@ -12,7 +12,7 @@ enum LoginStep {
   VerificationSuccess = 7,
 }
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [loginStep, setLoginStep] = useState<LoginStep>(
     LoginStep.StudentIDInput
