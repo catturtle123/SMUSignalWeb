@@ -35,7 +35,7 @@ const SignupPage: React.FC = () => {
         ?.split("=")[1];
 
       const res = await axios.post(
-        "http://15.164.227.179:3000//frontFunc/signUpFront",
+        "http://15.164.227.179:3000/frontFunc/signUpFront",
         {
           gender: selectedGender,
           instagram_id: instagramId,
@@ -48,6 +48,7 @@ const SignupPage: React.FC = () => {
       );
       console.log("res", res);
       console.log("회원가입 성공", res.data.message);
+
       alert("회원가입이 완료되었습니다!");
     } catch (error: any) {
       if (error.response) {
