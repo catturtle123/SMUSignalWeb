@@ -126,7 +126,7 @@ const SignupPage: React.FC = () => {
       <h2 className="text-2xl font-bold text-left mb-6 mt-6">
         성별을 알려주세요.
       </h2>
-      <div className="flex gap-2">
+      <div className="flex flex-row justify-center gap-2">
         <div className="">
           <img
             src={maleIcon}
