@@ -135,9 +135,12 @@ const LoginPage: React.FC = () => {
       if (res.status === 200) {
         console.log("회원가입 완료된 유저입니다.");
         navigate("/main"); // 회원가입 완료된 유저는 MainPage로 이동
-      } else {
+      } else if (res.status === 400) {
         console.log("회원가입이 완료되지 않은 유저입니다.");
         navigate("/signup"); // 회원가입이 완료되지 않은 유저는 SignupPage로 이동
+      } else {
+        console.log("다시 로그인 해주세요");
+        navigate("/login");
       }
     } catch (error: any) {
       if (error.response) {
