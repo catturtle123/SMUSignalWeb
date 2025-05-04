@@ -172,7 +172,7 @@ const SignupPage: React.FC = () => {
                 ? "bg-[#4364f7] text-white cursor-pointer"
                 : "bg-[#e1eaf8] text-white cursor-not-allowed"
             }`}
-            onClick={() => console.log(cookie)}
+            onClick={handleVerifyInstagram}
             disabled={!instagramId.trim()}
           >
             완료
