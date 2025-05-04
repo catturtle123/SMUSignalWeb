@@ -1,7 +1,20 @@
 import React, { useEffect, useState, FormEvent } from "react";
 import axios, { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 function MainPage() {
+  const navigate = useNavigate();
+
+  const getCookie = (name: string): string | null => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(";").shift() || null;
+    return null;
+  };
+
+  const token = getCookie("authToken");
+  const bearerToken = `Bearer ${token}`;
+
   const [instaId, setInstaId] = useState("...");
   const [rerollCount, setRerollCount] = useState(0);
   const [referralCode, setReferralCode] = useState("...");
@@ -9,31 +22,20 @@ function MainPage() {
   const [codeMessage, setCodeMessage] = useState("");
   const [codeColor, setCodeColor] = useState("#B4A5FE");
 
-  const token =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJzdHVkZW50X2lkIjoidGVzdCIsImlhdCI6MTc0NjI1OTk5NiwiZXhwIjoxNzQ2NDMyNzk2fQ.sOO3geDGVjrfUeeeZOE6anAjTvrXXWLnAYCn6HJUp2g";
-
   const isCodeValid = inputCode.length === 6 || inputCode.length === 8;
 
-  const fetchReroll = async () => {
-    try {
-      const response = await axios.get(
-        "http://15.164.227.179:3000/serialCode/myReroll",
-        { headers: { Authorization: token } }
-      );
-      setRerollCount(response.data.result ?? 0);
-    } catch (error) {
-      console.error("리롤 횟수 불러오기 실패", error);
-      setRerollCount(0);
-    }
-  };
-
   useEffect(() => {
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
+
     const fetchInstagram = async () => {
       try {
-        const response = await axios.get(
-          "http://15.164.227.179:3000/user/getMyIns",
-          { headers: { Authorization: token } }
-        );
+        const response = await axios.get("http://15.164.227.179:3000/user/getMyIns", {
+          headers: { Authorization: bearerToken },
+        });
         const id = response.data.result || "unknown";
         const trimmed = id.length > 7 ? id.slice(0, 7) + "..." : id;
         setInstaId(trimmed);
@@ -43,12 +45,23 @@ function MainPage() {
       }
     };
 
+    const fetchReroll = async () => {
+      try {
+        const response = await axios.get("http://15.164.227.179:3000/serialCode/myReroll", {
+          headers: { Authorization: bearerToken },
+        });
+        setRerollCount(response.data.result ?? 0);
+      } catch (error) {
+        console.error("리롤 횟수 불러오기 실패", error);
+        setRerollCount(0);
+      }
+    };
+
     const fetchReferralCode = async () => {
       try {
-        const response = await axios.get(
-          "http://15.164.227.179:3000/referral/getMyReferralCode",
-          { headers: { Authorization: token } }
-        );
+        const response = await axios.get("http://15.164.227.179:3000/referral/getMyReferralCode", {
+          headers: { Authorization: bearerToken },
+        });
         setReferralCode(response.data.result || "없음");
       } catch (error) {
         console.error("추천인 코드 불러오기 실패", error);
@@ -59,7 +72,18 @@ function MainPage() {
     fetchInstagram();
     fetchReroll();
     fetchReferralCode();
-  }, []);
+  }, [token, navigate]);
+
+  const fetchReroll = async () => {
+    try {
+      const response = await axios.get("http://15.164.227.179:3000/serialCode/myReroll", {
+        headers: { Authorization: bearerToken },
+      });
+      setRerollCount(response.data.result ?? 0);
+    } catch (error) {
+      console.error("리롤 횟수 갱신 실패", error);
+    }
+  };
 
   const handleMatchClick = async () => {
     if (rerollCount === 0) {
@@ -68,7 +92,7 @@ function MainPage() {
     }
     try {
       const response = await axios.get("http://15.164.227.179:3000/frontFunc/frontReroll", {
-        headers: { Authorization: token },
+        headers: { Authorization: bearerToken },
       });
       const matchedInsta = response.data.instagram_id;
       if (matchedInsta) {
@@ -100,54 +124,29 @@ function MainPage() {
       return;
     }
 
-    if (trimmedCode.length === 6) {
-      try {
-        await axios.patch(
-          "http://15.164.227.179:3000/referral/findReferralCode",
-          { referralCode: trimmedCode },
-          { headers: { Authorization: token } }
-        );
-        setCodeMessage("추천인 코드가 적용되었습니다.");
-        setCodeColor("#664BFF");
-        await fetchReroll();
-      } catch (error: unknown) {
-        const axiosError = error as AxiosError<{ message: string }>;
-        const status = axiosError.response?.status;
-        const msg = axiosError.response?.data?.message || "오류 발생";
+    const isReferral = trimmedCode.length === 6;
+    const url = isReferral
+      ? "http://15.164.227.179:3000/referral/findReferralCode"
+      : "http://15.164.227.179:3000/serialCode/insertCode";
+    const body = isReferral ? { referralCode: trimmedCode } : { serialCode: trimmedCode };
 
-        let finalMsg = msg;
-        if (status === 409) {
-          finalMsg = "이미 사용된 추천인 코드입니다.";
-        } else if (msg.includes("올바르지") || msg.includes("유효하지") || msg.includes("없")) {
-          finalMsg = "올바르지 않은 추천인 코드입니다.";
-        }
-
-        setCodeMessage(finalMsg);
-        setCodeColor("#FF6677");
-      }
-    } else if (trimmedCode.length === 8) {
-      try {
-        await axios.patch(
-          "http://15.164.227.179:3000/serialCode/insertCode",
-          { serialCode: trimmedCode },
-          { headers: { Authorization: token } }
-        );
-        setCodeMessage("시리얼 코드가 적용되었습니다.");
-        setCodeColor("#664BFF");
-        await fetchReroll();
-      } catch (error: unknown) {
-        const axiosError = error as AxiosError<{ message: string }>;
-        const msg = axiosError.response?.data?.message || "오류 발생";
-        const finalMsg = msg.includes("이미") ? "이미 사용된 시리얼 코드입니다." : "올바르지 않은 시리얼 코드입니다.";
-        setCodeMessage(finalMsg);
-        setCodeColor("#FF6677");
-      }
-    } else {
-      setCodeMessage("6자리 추천인 코드 혹은 8자리 시리얼 코드를 입력해주세요.");
+    try {
+      await axios.patch(url, body, { headers: { Authorization: bearerToken } });
+      setCodeMessage(isReferral ? "추천인 코드가 적용되었습니다." : "시리얼 코드가 적용되었습니다.");
       setCodeColor("#664BFF");
+      await fetchReroll();
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      const msg = axiosError.response?.data?.message || "오류 발생";
+      const finalMsg = msg.includes("이미")
+        ? `이미 사용된 ${isReferral ? "추천인" : "시리얼"} 코드입니다.`
+        : `올바르지 않은 ${isReferral ? "추천인" : "시리얼"} 코드입니다.`;
+      setCodeMessage(finalMsg);
+      setCodeColor("#FF6677");
     }
   };
 
+  
   return (
     <div className="w-screen min-h-screen bg-[#4B66FF] text-white flex justify-center">
       <div className="w-full max-w-[768px] flex flex-col min-h-screen">
@@ -156,9 +155,9 @@ function MainPage() {
           <img
             src="src/assets/settings.svg"
             alt="설정"
-            className="w-6 h-6 sm:w-7 sm:h-7 absolute top-4 right-4"
+            className="w-6 h-6 sm:w-7 sm:h-7 absolute top-4 right-4 cursor-pointer"
+            onClick={() => navigate("/settings")}
           />
-
           <div className="flex items-center justify-between">
             <div className="leading-[20px]">
               <p className="font-pretendard font-bold text-[24px] leading-[20px] tracking-[-0.5px]">
@@ -175,7 +174,6 @@ function MainPage() {
               className="w-30 h-30 sm:w-32 sm:h-32 md:w-36 md:h-36"
             />
           </div>
-
           <div className="bg-white text-black rounded-[32px] px-4 py-3 text-sm sm:text-base font-bold w-full flex items-center">
             <div className="bg-[#4D6FFF] text-white rounded-[32px] px-3 py-1 mr-3 text-sm">
               {rerollCount}
