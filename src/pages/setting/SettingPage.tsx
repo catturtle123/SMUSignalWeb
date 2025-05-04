@@ -2,9 +2,50 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import backBtn from "../../assets/backbtn.svg";
 import arrow from "../../assets/arrow.svg";
+import axios from "axios";
 
 const SettingPage: React.FC = () => {
   const navigate = useNavigate();
+
+  const handleDeleteUser = async () => {
+    try {
+      // 쿠키에서 토큰 가져오기
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("authToken="))
+        ?.split("=")[1];
+      console.log("token", token);
+
+      if (!token) {
+        alert("토큰이 존재하지 않습니다.");
+        return;
+      }
+
+      // 사용자 확인
+      const confirmDelete = window.confirm(
+        "정말로 유저를 삭제하시겠습니까?"
+      );
+      if (!confirmDelete) {
+        return; // 사용자가 취소를 선택한 경우 함수 종료
+      }
+
+      // API 호출
+      await axios.delete(
+        "http://15.164.227.179:3000/root/deleteUser",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("유저가 성공적으로 삭제되었습니다.");
+      navigate("/login"); // 삭제 후 로그인 페이지로 이동
+    } catch (error) {
+      console.error("유저 삭제 실패:", error);
+      alert("유저 삭제에 실패했습니다.");
+    }
+  };
 
   return (
     <div className="w-full flex flex-col gap-[20px] max-w-md mx-auto p-4 mt-4">
@@ -34,11 +75,7 @@ const SettingPage: React.FC = () => {
         </div>
         <div
           className="flex justify-between items-center py-3 cursor-pointer"
-          onClick={() =>
-            window.open(
-              "https://makeus-challenge.notion.site/UMCignal-1bcb57f4596b8006b1a3c4cdf165d5e1"
-            )
-          }
+          onClick={handleDeleteUser}
         >
           <span className="text-base font-bold">
             개인정보처리방침
