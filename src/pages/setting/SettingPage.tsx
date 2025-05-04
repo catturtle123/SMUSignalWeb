@@ -6,13 +6,6 @@ import arrow from "../../assets/arrow.svg";
 const SettingPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // 로그아웃 처리 (쿠키 삭제 등)
-    document.cookie = "authToken=; path=/; max-age=0;";
-    alert("로그아웃 되었습니다.");
-    navigate("/login"); // 로그인 페이지로 이동
-  };
-
   return (
     <div className="w-full flex flex-col gap-[20px] max-w-md mx-auto p-4 mt-4">
       {/* 뒤로가기 버튼 */}
