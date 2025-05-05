@@ -152,7 +152,7 @@ function MainPage() {
         {/* 상단 */}
         <div className="px-4 sm:px-6 py-6 pt-10 space-y-6 relative">
           <img
-            src="src/assets/settings.svg"
+            src="/assets/settings.svg"
             alt="설정"
             className="w-6 h-6 sm:w-7 sm:h-7 absolute top-4 right-4 cursor-pointer"
             onClick={() => navigate("/settings")}
@@ -168,7 +168,7 @@ function MainPage() {
               </p>
             </div>
             <img
-              src="src/assets/ghost.svg"
+              src="/assets/ghost.svg"
               alt="귀신"
               className="w-30 h-30 sm:w-32 sm:h-32 md:w-36 md:h-36"
             />
@@ -193,12 +193,12 @@ function MainPage() {
             </div>
             <div className="relative w-[140px] h-[100px] sm:w-[100px] sm:h-[100px] flex-shrink-0">
               <img
-                src="src/assets/redheart.svg"
+                src="/assets/redheart.svg"
                 alt="레드 하트"
                 className="absolute top-11 left-6 w-[100%] h-[80%] object-contain z-0"
               />
               <img
-                src="src/assets/goldheart.svg"
+                src="/assets/goldheart.svg"
                 alt="골드 하트"
                 className="absolute top-12 right-3 w-[100%] h-[86%] object-contain z-0"
               />
@@ -210,7 +210,7 @@ function MainPage() {
             <div className="flex justify-between items-center">
               <div className="text-lg sm:text-xl font-bold">{referralCode}</div>
               <img
-                src="src/assets/document.svg"
+                src="/assets/document.svg"
                 alt="복사"
                 onClick={handleCopyReferralCode}
                 className="cursor-pointer w-10 h-10 sm:w-10 sm:h-10 absolute right-4 top-1/2 transform -translate-y-1/2"
