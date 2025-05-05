@@ -31,7 +31,7 @@ const SettingPage: React.FC = () => {
 
       // API 호출
       await axios.patch(
-        "http://15.164.227.179:3000/user/signOut",
+        "https://smuumc.kro.kr/user/signOut",
         {},
         {
           headers: {

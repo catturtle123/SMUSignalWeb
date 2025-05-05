@@ -33,7 +33,7 @@ function MainPage() {
 
     const fetchInstagram = async () => {
       try {
-        const response = await axios.get("http://15.164.227.179:3000/user/getMyIns", {
+        const response = await axios.get("https://smuumc.kro.kr/user/getMyIns", {
           headers: { Authorization: bearerToken },
         });
         const id = response.data.result || "unknown";
@@ -47,7 +47,7 @@ function MainPage() {
 
     const fetchReroll = async () => {
       try {
-        const response = await axios.get("http://15.164.227.179:3000/serialCode/myReroll", {
+        const response = await axios.get("https://smuumc.kro.kr/serialCode/myReroll", {
           headers: { Authorization: bearerToken },
         });
         setRerollCount(response.data.result ?? 0);
@@ -59,7 +59,7 @@ function MainPage() {
 
     const fetchReferralCode = async () => {
       try {
-        const response = await axios.get("http://15.164.227.179:3000/referral/getMyReferralCode", {
+        const response = await axios.get("https://smuumc.kro.kr/referral/getMyReferralCode", {
           headers: { Authorization: bearerToken },
         });
         setReferralCode(response.data.result || "없음");
@@ -76,7 +76,7 @@ function MainPage() {
 
   const fetchReroll = async () => {
     try {
-      const response = await axios.get("http://15.164.227.179:3000/serialCode/myReroll", {
+      const response = await axios.get("https://smuumc.kro.kr/serialCode/myReroll", {
         headers: { Authorization: bearerToken },
       });
       setRerollCount(response.data.result ?? 0);
@@ -91,7 +91,7 @@ function MainPage() {
       return;
     }
     try {
-      const response = await axios.get("http://15.164.227.179:3000/frontFunc/frontReroll", {
+      const response = await axios.get("https://smuumc.kro.kr/frontFunc/frontReroll", {
         headers: { Authorization: bearerToken },
       });
       const matchedInsta = response.data.instagram_id;
@@ -126,8 +126,8 @@ function MainPage() {
 
     const isReferral = trimmedCode.length === 6;
     const url = isReferral
-      ? "http://15.164.227.179:3000/referral/findReferralCode"
-      : "http://15.164.227.179:3000/serialCode/insertCode";
+      ? "https://smuumc.kro.kr/referral/findReferralCode"
+      : "https://smuumc.kro.kr/serialCode/insertCode";
     const body = isReferral ? { referralCode: trimmedCode } : { serialCode: trimmedCode };
 
     try {

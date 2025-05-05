@@ -60,7 +60,7 @@ const LoginPage: React.FC = () => {
   const postData: () => Promise<void> = async () => {
     try {
       const res = await axios.post(
-        "http://15.164.227.179:3000/user/mailCode",
+        "https://smuumc.kro.kr/user/mailCode",
         {
           mail: `${studentId}@sangmyung.kr`,
         }
@@ -123,7 +123,7 @@ const LoginPage: React.FC = () => {
       }
 
       const res = await axios.get(
-        "http://15.164.227.179:3000/frontFunc/operationFront",
+        "https://smuumc.kro.kr/frontFunc/operationFront",
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -217,7 +217,7 @@ const LoginPage: React.FC = () => {
   const verifyCode: () => Promise<void> = async () => {
     try {
       const res = await axios.post(
-        "http://15.164.227.179:3000/user/verify",
+        "https://smuumc.kro.kr/user/verify",
         {
           mailVerification: verificationCode,
         }

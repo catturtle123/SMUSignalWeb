@@ -37,7 +37,7 @@ const SignupPage: React.FC = () => {
         ?.split("=")[1];
 
       const res = await axios.post(
-        "http://15.164.227.179:3000/frontFunc/signUpFront",
+        "https://smuumc.kro.kr/frontFunc/signUpFront",
         {
           gender: selectedGender,
           instagram_id: instagramId,
