@@ -60,7 +60,7 @@ const LoginPage: React.FC = () => {
   const postData: () => Promise<void> = async () => {
     try {
       const res = await axios.post(
-        "https://smuumc.kro.kr/user/mailCode",
+        "http://15.164.227.179:3000/user/mailCode",
         {
           mail: `${studentId}@sangmyung.kr`,
         }
@@ -123,7 +123,7 @@ const LoginPage: React.FC = () => {
       }
 
       const res = await axios.get(
-        "https://smuumc.kro.kr/frontFunc/operationFront",
+        "http://15.164.227.179:3000/frontFunc/operationFront",
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -217,7 +217,7 @@ const LoginPage: React.FC = () => {
   const verifyCode: () => Promise<void> = async () => {
     try {
       const res = await axios.post(
-        "https://smuumc.kro.kr/user/verify",
+        "http://15.164.227.179:3000/user/verify",
         {
           mailVerification: verificationCode,
         }
@@ -247,20 +247,14 @@ const LoginPage: React.FC = () => {
               }`
             );
             break;
+          case 403:
           case 401:
             console.error(
               `인증 코드 검증 실패: ${status}, ${
-                data.message ||
-                "인증 코드가 올바르지 않습니다. 다시 인증해주세요."
+                data.message || "인증 코드가 올바르지 않습니다."
               }`
             );
-            break;
-          case 408:
-            console.error(
-              `인증 코드 검증 실패: ${status}, ${
-                data.message || "인증 코드는 6자리여야 합니다."
-              }`
-            );
+            setLoginStep(LoginStep.InvalidVerificationCode); // 상태 변경
             break;
           case 500:
             console.error(
@@ -318,7 +312,7 @@ const LoginPage: React.FC = () => {
                 onChange={handleStudentIdChange}
                 maxLength={9}
                 placeholder="학번을 입력하세요"
-                className="w-[135px] h-[28px] py-3 px-3 text-[20px] text-center placeholder:text-[14px] font-semibold bg-white text-black" 
+                className="w-[135px] h-[28px] py-3 px-3 text-[20px] text-center placeholder:text-[14px] font-semibold"
               />
               <button
                 className={`w-[136px] h-[45px] text-center text-[16px] font-semibold rounded-md transition-colors ${
@@ -376,7 +370,7 @@ const LoginPage: React.FC = () => {
                 onChange={handleVerificationCodeChange}
                 maxLength={6}
                 placeholder="인증코드 6자리"
-                className="w-full py-3 px-3 mb-2 mt-5 border border-gray-300 rounded-md text-xl placeholder:text-base text-left font-bold bg-white text-black"
+                className="w-full py-3 px-3 mb-2 mt-5 border border-gray-300 rounded-md text-xl placeholder:text-base text-left font-bold"
               />
             </div>
             <button
@@ -400,19 +394,21 @@ const LoginPage: React.FC = () => {
         return (
           <>
             <div className="text-center mb-8 w-full">
-              <h1 className="text-xl font-bold mb-4">로그인</h1>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <h1 className="text-2xl font-bold mb-4 text-left">
+                로그인
+              </h1>
+              <p className="text-base text-black text-left">
                 학번만 기재할 경우,
                 <br />
                 메일주소가 자동으로 반영되어서 전송됩니다.
               </p>
             </div>
-            <div className="flex justify-between items-center w-full mb-4 py-3 px-3 border border-gray-300 rounded-md">
-              <span className="text-base text-gray-800">
+            <div className="flex justify-between items-center w-[327px] mb-4 py-3 px-3 border border-gray-300 rounded-md">
+              <span className="w-[135px] h-[28px] text-[20px] text-center font-semibold text-gray-800">
                 {studentId}
               </span>
               <button
-                className="bg-[#e1eaf8] text-white py-2 px-4 rounded-md cursor-pointer disabled:cursor-not-allowed"
+                className="w-[136px] h-[45px] text-center text-[16px] font-semibold rounded-md transition-colors bg-[#e1eaf8] text-white cursor-pointer disabled:cursor-not-allowed"
                 onClick={() => setIsSubmitted(false)}
                 disabled={isSubmitted}
               >
@@ -420,12 +416,12 @@ const LoginPage: React.FC = () => {
               </button>
             </div>
             <div className="w-full mb-4">
-              <p className="text-sm text-[#5271ff] mb-4 leading-relaxed">
+              <p className="text-[12px] text-[#4B67FF] font-bold leading-[120%] mb-4">
                 {studentId}@sangmyung.kr로
                 <br />
                 인증번호를 전송했습니다.
                 <br />
-                스팸 메일함도 확인해주세요
+                스팸 메일함도 확인해주세요 :)
               </p>
               <input
                 type="text"
@@ -433,7 +429,7 @@ const LoginPage: React.FC = () => {
                 onChange={handleVerificationCodeChange}
                 maxLength={6}
                 placeholder="인증코드 6자리"
-                className="w-full py-3 px-3 mb-2 border border-[#ff4d4f] rounded-md text-base text-center"
+                className="w-full py-3 px-3 mb-2 border border-[#ff4d4f] rounded-md text-xl placeholder:text-base text-left font-bold"
               />
               <p className="text-xs text-[#ff4d4f] mb-4">
                 유효한 인증코드가 아닙니다!
