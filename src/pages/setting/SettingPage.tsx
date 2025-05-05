@@ -72,7 +72,7 @@ const SettingPage: React.FC = () => {
             )
           }
         >
-          <span className="text-base font-bold">이용약관</span>
+          <span className="text-base font-bold text-black">이용약관</span>
           <img src={arrow} alt="이동하기" className="w-4 h-4" />
         </div>
         <div
@@ -83,7 +83,7 @@ const SettingPage: React.FC = () => {
             )
           }
         >
-          <span className="text-base font-bold">
+          <span className="text-base font-bold text-black">
             개인정보처리방침
           </span>
           <img src={arrow} alt="이동하기" className="w-4 h-4" />
