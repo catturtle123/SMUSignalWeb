@@ -241,7 +241,7 @@ function MainPage() {
                   setCodeMessage("");
                 }
               }}
-              className="px-4 py-2 w-full text-black outline-none text-sm sm:text-base font-semibold h-full flex items-center"
+              className="px-4 py-2 w-full text-black outline-none text-sm sm:text-base font-semibold h-full flex items-center bg-white text-black"
               style={{ lineHeight: "normal" }}
             />
             <button
