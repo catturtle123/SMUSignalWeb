@@ -156,19 +156,20 @@ const SignupPage: React.FC = () => {
 
       {clickedGender && (
         <div className="mt-5 flex flex-col gap-5">
-          <h3 className="text-2xl font-bold">
+          <h3 className="text-2xl font-bold text-black">
             인스타그램 아이디를 입력해주세요.
           </h3>
-          <p className="text-base">
+          <p className="text-base text-black">
             다른 인스타 아이디를 도용하거나, 없는 인스타 아이디를
             기재할 시 손해 배상 청구 및 개인정보 도용, 서비스
             이용제한의 사유가 될 수있습니다.
           </p>
           <input
             type="text"
-            className="w-[347px] h-[46px] py-3 px-3 mb-2 mt-5 border border-gray-300 rounded-lg text-xl font-semibold"
+            className="w-[347px] h-[46px] py-3 px-3 mb-2 mt-5 border border-gray-300 rounded-lg text-xl font-semibold bg-white text-black placeholder:text-[16px] "
             value={instagramId}
             onChange={handleInputChange}
+            placeholder="@ 제외하고 입력해주세요!"
           />
           <button
             className={`w-[347px] h-[57px] py-3 text-lg font-semibold rounded-xl transition-colors ${
