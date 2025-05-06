@@ -107,7 +107,7 @@ function MainPage() {
       });
       const matchedInsta = response.data.instagram_id;
       if (matchedInsta) {
-        await fetchReroll();
+        // await fetchReroll();
         navigate("/matching", { state: { instaId: matchedInsta, from: "main" } });
 
       } else {
