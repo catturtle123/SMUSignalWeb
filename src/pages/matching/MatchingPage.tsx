@@ -1,6 +1,6 @@
 // pages/matching/MatchingPage.tsx
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import umung1 from "../../assets/umung1.gif";
 import umung2 from "../../assets/umung3.gif";
 import kakao from "../../assets/umung2.gif";
@@ -9,6 +9,7 @@ type MatchingStatus = "loading" | "success" | "error";
 
 const MatchingPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const instaId = location.state?.instaId;
 
   const [status, setStatus] = useState<MatchingStatus>("loading");
@@ -21,6 +22,7 @@ const MatchingPage: React.FC = () => {
         setStatus("success");
         setTimeout(() => {
           window.location.href = `https://instagram.com/${instaId}`;
+          navigate("/main");
         }, 3000);
       }
     }, 3000);
