@@ -23,7 +23,7 @@ const MatchingPage: React.FC = () => {
           window.location.href = `https://instagram.com/${instaId}`;
         }, 3000);
       }
-    }, 2000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [instaId]);
