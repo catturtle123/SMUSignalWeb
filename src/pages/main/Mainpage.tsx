@@ -107,8 +107,9 @@ function MainPage() {
       });
       const matchedInsta = response.data.instagram_id;
       if (matchedInsta) {
-        window.open(`https://instagram.com/${matchedInsta}`, "_blank");
         await fetchReroll();
+        navigate("/matching", { state: { instaId: matchedInsta } });
+
       } else {
         alert("매칭된 인스타 ID가 없습니다.");
       }
