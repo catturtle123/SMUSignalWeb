@@ -21,9 +21,9 @@ const MatchingPage: React.FC = () => {
         setStatus("success");
         setTimeout(() => {
           window.location.href = `https://instagram.com/${instaId}`;
-        }, 3000); // 성공 화면 3초 후 이동
+        }, 3000);
       }
-    }, 2000); // 로딩 2초 후 상태 전환
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [instaId]);
@@ -38,9 +38,9 @@ const MatchingPage: React.FC = () => {
               autoPlay
               loop
               muted
-              className="w-[200px] h-[200px] rounded-xl mb-6"
+              className="max-w-[300px] w-full aspect-square rounded-xl mb-6"
             />
-            <p className="text-white text-center font-semibold">
+            <p className="text-center font-semibold text-base">
               작성해주신 정보를 바탕으로 AI가 당신의 짝을 열심히 찾습니다!
             </p>
           </>
@@ -54,12 +54,12 @@ const MatchingPage: React.FC = () => {
               autoPlay
               loop
               muted
-              className="w-[200px] h-[200px] rounded-xl mb-6"
+              className="max-w-[300px] w-full aspect-square rounded-xl mb-6"
             />
-            <p className="text-white text-center font-semibold">
+            <p className="text-center font-semibold text-base">
               AI가 당신의 짝을 찾았습니다!!!
               <br />
-              <span className="text-blue-200 text-sm">
+              <span className="text-blue-600 text-sm">
                 결과 화면으로 넘어가는 중이니 잠시만 기다려주세요.
               </span>
             </p>
@@ -74,14 +74,14 @@ const MatchingPage: React.FC = () => {
               autoPlay
               loop
               muted
-              className="w-[200px] h-[200px] rounded-xl mb-6"
+              className="max-w-[300px] w-full aspect-square rounded-xl mb-6"
             />
-            <p className="text-white text-center font-semibold">
+            <p className="text-center font-semibold text-base">
               검색 중 오류가 발생했습니다.
               <br />
               SMUMC 부스로 찾아와주세요!
               <br />
-              <span className="text-red-300 text-sm">해당 화면을 캡쳐해주세요.</span>
+              <span className="text-red-500 text-sm">해당 화면을 캡쳐해주세요.</span>
             </p>
           </>
         );
@@ -89,7 +89,7 @@ const MatchingPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-screen flex flex-col items-center justify-center bg-[#4B66FF] px-6 text-white">
+    <div className="w-full min-h-screen bg-white text-black flex flex-col items-center justify-center px-6">
       {renderContent()}
     </div>
   );
