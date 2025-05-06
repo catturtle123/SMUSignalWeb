@@ -56,6 +56,9 @@ function MainPage() {
           headers: { Authorization: bearerToken },
         });
         setRerollCount(response.data.result ?? 0);
+        if (rerollCount === 0) {
+            window.alert("뽑기를 모두 사용하셨습니다.\n대학본부 앞 SMUMC 부스로 와주세요!");
+        }
       } catch (error) {
         console.error("리롤 횟수 불러오기 실패", error);
         setRerollCount(0);
@@ -92,7 +95,7 @@ function MainPage() {
 
   const handleMatchClick = async () => {
     if (rerollCount === 0) {
-      alert("리롤 횟수가 없습니다. 먼저 리롤을 시도하세요.");
+      alert("뽑기를 모두 사용하셨습니다.\n대학본부 앞 SMUMC 부스로 와주세요!");
       return;
     }
     try {
