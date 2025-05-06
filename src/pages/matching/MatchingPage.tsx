@@ -31,7 +31,7 @@ const MatchingPage: React.FC = () => {
           } else {
             navigate("/main", { replace: true }); // fallback
           }
-        }, 2750);
+        }, 3000);
       }
     }, 3000);
 
