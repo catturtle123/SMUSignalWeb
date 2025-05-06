@@ -1,4 +1,4 @@
-import { useEffect, useState, FormEvent } from "react";
+import { useEffect, useState, FormEvent, useRef } from "react";
 import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import ghost from "../../assets/ghost.svg";
@@ -26,6 +26,7 @@ function MainPage() {
   const [inputCode, setInputCode] = useState("");
   const [codeMessage, setCodeMessage] = useState("");
   const [codeColor, setCodeColor] = useState("#B4A5FE");
+  const hasAlertedRef = useRef(false);
 
   const isCodeValid = inputCode.length === 6 || inputCode.length === 8;
 
@@ -55,7 +56,12 @@ function MainPage() {
         const response = await axios.get("https://smuumc.kro.kr/serialCode/myReroll", {
           headers: { Authorization: bearerToken },
         });
-        setRerollCount(response.data.result ?? 0);
+        const count = response.data.result ?? 0;
+        setRerollCount(count);
+        if (count === 0 && !hasAlertedRef.current) {
+          window.alert("뽑기를 모두 사용하셨습니다.\n대학본부 앞 SMUMC 부스로 와주세요!");
+          hasAlertedRef.current = true;
+        }
       } catch (error) {
         console.error("리롤 횟수 불러오기 실패", error);
         setRerollCount(0);
@@ -92,7 +98,7 @@ function MainPage() {
 
   const handleMatchClick = async () => {
     if (rerollCount === 0) {
-      alert("리롤 횟수가 없습니다. 먼저 리롤을 시도하세요.");
+      alert("뽑기를 모두 사용하셨습니다.\n대학본부 앞 SMUMC 부스로 와주세요!");
       return;
     }
     try {
