@@ -312,7 +312,7 @@ const LoginPage: React.FC = () => {
                 onChange={handleStudentIdChange}
                 maxLength={9}
                 placeholder="학번을 입력하세요"
-                className="w-[135px] h-[28px] py-3 px-3 text-[20px] text-center placeholder:text-[14px] font-semibold"
+                className="w-[135px] h-[28px] py-3 px-3 text-[20px] text-center placeholder:text-[14px] font-semibold bg-white text-black"
               />
               <button
                 className={`w-[136px] h-[45px] text-center text-[16px] font-semibold rounded-md transition-colors ${
@@ -370,7 +370,7 @@ const LoginPage: React.FC = () => {
                 onChange={handleVerificationCodeChange}
                 maxLength={6}
                 placeholder="인증코드 6자리"
-                className="w-full py-3 px-3 mb-2 mt-5 border border-gray-300 rounded-md text-xl placeholder:text-base text-left font-bold"
+                className="w-full py-3 px-3 mb-2 mt-5 border border-gray-300 rounded-md text-xl placeholder:text-base text-left font-bold bg-white text-black"
               />
             </div>
             <button
@@ -429,7 +429,7 @@ const LoginPage: React.FC = () => {
                 onChange={handleVerificationCodeChange}
                 maxLength={6}
                 placeholder="인증코드 6자리"
-                className="w-full py-3 px-3 mb-2 border border-[#ff4d4f] rounded-md text-xl placeholder:text-base text-left font-bold"
+                className="w-full py-3 px-3 mb-2 border border-[#ff4d4f] rounded-md text-xl placeholder:text-base bg-white text-black"
               />
               <p className="text-xs text-[#ff4d4f] mb-4">
                 유효한 인증코드가 아닙니다!
