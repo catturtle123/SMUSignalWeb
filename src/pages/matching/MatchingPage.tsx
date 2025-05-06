@@ -1,6 +1,9 @@
 // pages/matching/MatchingPage.tsx
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import umung1 from "../../assets/umung1.mp4";
+import umung2 from "../../assets/umung2.mp4";
+
 
 const MatchingPage: React.FC = () => {
   const location = useLocation();
@@ -24,8 +27,8 @@ const MatchingPage: React.FC = () => {
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center bg-[#4B66FF] text-white">
       <div className="flex gap-4 mb-6">
-        <video src="/video1.mp4" autoPlay loop muted className="w-[150px] h-[200px] rounded-lg" />
-        <video src="/video2.mp4" autoPlay loop muted className="w-[150px] h-[200px] rounded-lg" />
+        <video src={umung1} autoPlay loop muted className="w-[150px] h-[200px] rounded-lg" />
+        <video src={umung2} autoPlay loop muted className="w-[150px] h-[200px] rounded-lg" />
       </div>
       <p className="text-xl font-bold animate-pulse">매칭 중...</p>
     </div>
