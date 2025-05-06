@@ -1,9 +1,9 @@
 // pages/matching/MatchingPage.tsx
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import umung1 from "../../assets/umung1.mp4";
-import umung2 from "../../assets/umung2.mp4";
-import kakao from "../../assets/kakao.mp4";
+import umung1 from "../../assets/umung1.gif";
+import umung2 from "../../assets/umung3.gif";
+import kakao from "../../assets/umung2.gif";
 
 type MatchingStatus = "loading" | "success" | "error";
 
@@ -33,11 +33,9 @@ const MatchingPage: React.FC = () => {
       case "loading":
         return (
           <>
-            <video
+            <img
               src={umung1}
-              autoPlay
-              loop
-              muted
+              alt="매칭 중"
               className="max-w-[300px] w-full aspect-square rounded-xl mb-6"
             />
             <p className="text-center font-semibold text-base">
@@ -49,11 +47,9 @@ const MatchingPage: React.FC = () => {
       case "success":
         return (
           <>
-            <video
+            <img
               src={umung2}
-              autoPlay
-              loop
-              muted
+              alt="매칭 성공"
               className="max-w-[300px] w-full aspect-square rounded-xl mb-6"
             />
             <p className="text-center font-semibold text-base">
@@ -69,11 +65,9 @@ const MatchingPage: React.FC = () => {
       case "error":
         return (
           <>
-            <video
+            <img
               src={kakao}
-              autoPlay
-              loop
-              muted
+              alt="매칭 실패"
               className="max-w-[300px] w-full aspect-square rounded-xl mb-6"
             />
             <p className="text-center font-semibold text-base">
