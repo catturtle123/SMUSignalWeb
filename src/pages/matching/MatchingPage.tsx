@@ -1,6 +1,6 @@
 // pages/matching/MatchingPage.tsx
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import umung1 from "../../assets/umung1.gif";
 import umung2 from "../../assets/umung3.gif";
 import kakao from "../../assets/umung2.gif";
@@ -9,11 +9,7 @@ type MatchingStatus = "loading" | "success" | "error";
 
 const MatchingPage: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-
   const instaId = location.state?.instaId;
-  const cameFromMain = location.state?.from === "main";
-
   const [status, setStatus] = useState<MatchingStatus>("loading");
 
   useEffect(() => {
@@ -23,20 +19,15 @@ const MatchingPage: React.FC = () => {
       } else {
         setStatus("success");
 
-        // 3초 후 인스타그램 이동 → MatchingPage 스택 제거
+        // 3초 후 인스타그램 페이지로 현재 탭에서 이동 (히스토리에 안 남김)
         setTimeout(() => {
-          window.location.href = `https://instagram.com/${instaId}`;
-          if (cameFromMain) {
-            navigate(-1); // MatchingPage 스택에서 제거
-          } else {
-            navigate("/main", { replace: true }); // fallback
-          }
+          window.location.replace(`https://instagram.com/${instaId}`);
         }, 3000);
       }
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, [instaId, cameFromMain, navigate]);
+  }, [instaId]);
 
   const renderContent = () => {
     switch (status) {
