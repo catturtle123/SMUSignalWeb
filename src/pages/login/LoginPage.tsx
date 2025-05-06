@@ -248,13 +248,19 @@ const LoginPage: React.FC = () => {
             );
             break;
           case 403:
-          case 401:
             console.error(
               `인증 코드 검증 실패: ${status}, ${
-                data.message || "인증 코드가 올바르지 않습니다."
+                data.message ||
+                "인증 코드가 올바르지 않습니다. 다시 인증해주세요."
               }`
             );
-            setLoginStep(LoginStep.InvalidVerificationCode); // 상태 변경
+            break;
+          case 408:
+            console.error(
+              `인증 코드 검증 실패: ${status}, ${
+                data.message || "인증 코드는 6자리여야 합니다."
+              }`
+            );
             break;
           case 500:
             console.error(
