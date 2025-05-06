@@ -108,7 +108,7 @@ function MainPage() {
       const matchedInsta = response.data.instagram_id;
       if (matchedInsta) {
         await fetchReroll();
-        navigate("/matching", { state: { instaId: matchedInsta } });
+        navigate("/matching", { state: { instaId: matchedInsta, from: "main" } });
 
       } else {
         alert("매칭된 인스타 ID가 없습니다.");

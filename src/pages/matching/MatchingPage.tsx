@@ -10,7 +10,9 @@ type MatchingStatus = "loading" | "success" | "error";
 const MatchingPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
   const instaId = location.state?.instaId;
+  const cameFromMain = location.state?.from === "main";
 
   const [status, setStatus] = useState<MatchingStatus>("loading");
 
@@ -20,15 +22,21 @@ const MatchingPage: React.FC = () => {
         setStatus("error");
       } else {
         setStatus("success");
+
+        // 3초 후 인스타그램 이동 → MatchingPage 스택 제거
         setTimeout(() => {
           window.location.href = `https://instagram.com/${instaId}`;
-          navigate("/main", {replace: true});
+          if (cameFromMain) {
+            navigate(-1); // MatchingPage 스택에서 제거
+          } else {
+            navigate("/main", { replace: true }); // fallback
+          }
         }, 3000);
       }
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, [instaId]);
+  }, [instaId, cameFromMain, navigate]);
 
   const renderContent = () => {
     switch (status) {
