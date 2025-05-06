@@ -22,7 +22,7 @@ const MatchingPage: React.FC = () => {
         setStatus("success");
         setTimeout(() => {
           window.location.href = `https://instagram.com/${instaId}`;
-          navigate("/main");
+          navigate("/main", {replace: true});
         }, 3000);
       }
     }, 3000);
