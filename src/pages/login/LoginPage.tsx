@@ -123,7 +123,7 @@ const LoginPage: React.FC = () => {
       }
 
       const res = await axios.get(
-        "http://15.164.227.179:3000/frontFunc/operationFront",
+        "https://smuumc.kro.kr/frontFunc/operationFront",
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -217,7 +217,7 @@ const LoginPage: React.FC = () => {
   const verifyCode: () => Promise<void> = async () => {
     try {
       const res = await axios.post(
-        "http://15.164.227.179:3000/user/verify",
+        "https://smuumc.kro.kr/user/verify",
         {
           mailVerification: verificationCode,
         }
@@ -248,19 +248,13 @@ const LoginPage: React.FC = () => {
             );
             break;
           case 403:
+          case 401:
             console.error(
               `인증 코드 검증 실패: ${status}, ${
-                data.message ||
-                "인증 코드가 올바르지 않습니다. 다시 인증해주세요."
+                data.message || "인증 코드가 올바르지 않습니다."
               }`
             );
-            break;
-          case 408:
-            console.error(
-              `인증 코드 검증 실패: ${status}, ${
-                data.message || "인증 코드는 6자리여야 합니다."
-              }`
-            );
+            setLoginStep(LoginStep.InvalidVerificationCode); // 상태 변경
             break;
           case 500:
             console.error(
