@@ -60,7 +60,7 @@ const LoginPage: React.FC = () => {
   const postData: () => Promise<void> = async () => {
     try {
       const res = await axios.post(
-        "http://15.164.227.179:3000/user/mailCode",
+        "https://smuumc.kro.kr/user/mailCode",
         {
           mail: `${studentId}@sangmyung.kr`,
         }
