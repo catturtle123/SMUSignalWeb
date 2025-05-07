@@ -99,10 +99,10 @@ function MainPage() {
   const handleMatchClick = async () => {
     const now = new Date();
     // 한국 표준시 기준으로 변환 (UTC+9)
-    const nowInKST = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+    // const nowInKST = new Date(now.getTime() + (9 * 60 * 60 * 1000));
     // 기준 시간: 2025년 5월 8일 00:00:00 KST
     const targetTime = new Date('2025-05-07T15:00:00Z'); // KST 기준으로 2025-05-08T00:00:00
-    if (nowInKST < targetTime) {
+    if (now < targetTime) {
       alert("현재 매칭 가능 기간이 아닙니다.\n5/8 정각부터 이벤트가 시작됩니다.");
       return;
     }
