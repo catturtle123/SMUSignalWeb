@@ -101,9 +101,9 @@ function MainPage() {
     // 한국 표준시 기준으로 변환 (UTC+9)
     // const nowInKST = new Date(now.getTime() + (9 * 60 * 60 * 1000));
     // 기준 시간: 2025년 5월 8일 00:00:00 KST
-    const targetTime = new Date('2025-05-07T15:00:00Z'); // KST 기준으로 2025-05-08T00:00:00
+    const targetTime = new Date('2025-05-08T01:00:00Z'); // KST 기준으로 2025-05-08T00:00:00
     if (now < targetTime) {
-      alert("현재 매칭 가능 기간이 아닙니다.\n5/8 정각부터 이벤트가 시작됩니다.");
+      alert("현재 매칭 가능 시간이 아닙니다.\n오전 2시부터 오전 10시까지는 매칭이 진행되지 않습니다.");
       return;
     }
     if (rerollCount === 0) {
