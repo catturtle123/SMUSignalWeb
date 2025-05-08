@@ -217,9 +217,10 @@ const LoginPage: React.FC = () => {
   const verifyCode: () => Promise<void> = async () => {
     try {
       const res = await axios.post(
-        "https://smuumc.kro.kr/user/verify",
+        "https://smuumc.kro.kr/user/verifyStudentId",
         {
           mailVerification: verificationCode,
+          student_id: studentId,
         }
       );
 
