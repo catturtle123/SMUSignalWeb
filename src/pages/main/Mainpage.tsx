@@ -101,7 +101,7 @@ function MainPage() {
     // 한국 표준시 기준으로 변환 (UTC+9)
     // const nowInKST = new Date(now.getTime() + (9 * 60 * 60 * 1000));
     // 기준 시간: 2025년 5월 8일 00:00:00 KST
-    const targetTime = new Date('2025-05-09T02:00:00Z'); // KST 기준으로 2025-05-09 오전 11:00:00
+    const targetTime = new Date('2025-05-08T02:00:00Z'); // KST 기준으로 2025-05-09 오전 11:00:00
     if (now < targetTime) {
       alert("죄송합니다.. 현재 서버 에러로 11시까지 서버를 고쳐보도록하겠습니다\n이용에 불편을 드려 죄송합니다.");
       return;
