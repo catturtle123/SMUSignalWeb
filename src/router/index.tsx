@@ -1,25 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import MainPage from "../pages/main/Mainpage";
-import LoginPage from "../pages/login/LoginPage";
-import SignupPage from "../pages/signup/SignupPage";
-import SettingPage from "../pages/setting/SettingPage";
-import MatchingPage from "../pages/matching/MatchingPage";
-
-// 쿠키에서 토큰 읽는 함수
-const getCookie = (name: string): string | null => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()?.split(";").shift() || null;
-  return null;
-};
+import LandingPage from "../pages/landing/landing"; // 종료 안내 페이지 import
 
 function AppRouter() {
-  const token = getCookie("authToken");
-
   return (
     <BrowserRouter>
       <Routes>
-        {/* 루트 접근 시 로그인 여부에 따라 리다이렉션 */}
+        {/* 종료 안내 페이지 */}
+        <Route path="/landing" element={<LandingPage />} />
+
+        {/* 나머지 모든 경로는 /landing으로 강제 이동 */}
         <Route path="*" element={<Navigate to="/landing" replace />} />
       </Routes>
     </BrowserRouter>
