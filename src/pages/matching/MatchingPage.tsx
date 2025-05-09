@@ -87,7 +87,7 @@ const MatchingPage: React.FC = () => {
             <p className="text-center font-semibold text-base">
               검색 중 오류가 발생했습니다.
               <br />
-              SMUMC 부스로 찾아와주세요!
+              스뮤시그널 1대1 옵챗에 문의 넣어주세요!
               <br />
               <span className="text-red-500 text-sm">해당 화면을 캡쳐해주세요.</span>
             </p>
