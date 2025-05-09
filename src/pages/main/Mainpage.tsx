@@ -59,7 +59,7 @@ function MainPage() {
         const count = response.data.result ?? 0;
         setRerollCount(count);
         if (count === 0 && !hasAlertedRef.current) {
-          window.alert("뽑기를 모두 사용하셨습니다.\n대학본부 앞 SMUMC 부스로 와주세요!");
+          window.alert("뽑기를 모두 사용하셨습니다.\n에브리타임 온라인 리롤권 구매 공지를 확인하여 주세요!");
           hasAlertedRef.current = true;
         }
       } catch (error) {
@@ -107,7 +107,7 @@ function MainPage() {
       return;
     }
     if (rerollCount === 0) {
-      alert("뽑기를 모두 사용하셨습니다.\n대학본부 앞 SMUMC 부스로 와주세요!");
+      alert("뽑기를 모두 사용하셨습니다.\n에브리타임 온라인 리롤권 구매 공지를 확인하여 주세요!");
       return;
     }
     try {
