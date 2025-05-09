@@ -8,7 +8,7 @@ const LandingPage: React.FC = () => {
       <img
         src={kwajam}
         alt="종료 이미지"
-        className="w-[240px] h-[240px] mb-8"
+        className="max-w-xs w-full h-auto mb-8 object-contain"
       />
       <h1 className="text-xl font-bold text-center text-black mb-2">
         스뮤 시그널이 종료되었습니다.
