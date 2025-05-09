@@ -20,12 +20,7 @@ function AppRouter() {
     <BrowserRouter>
       <Routes>
         {/* 루트 접근 시 로그인 여부에 따라 리다이렉션 */}
-        <Route path="/" element={<Navigate to={token ? "/main" : "/login"} />} />
-        <Route path="/main" element={<MainPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/settings" element={<SettingPage />} />
-        <Route path="/matching" element={<MatchingPage />} />
+        <Route path="*" element={<Navigate to="/landing" replace />} />
       </Routes>
     </BrowserRouter>
   );
