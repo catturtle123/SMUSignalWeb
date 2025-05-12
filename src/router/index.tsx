@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import LandingPage from "../pages/landing/landing"; // 종료 안내 페이지 import
+import LandingPage from "../pages/matching/MatchingPage"; // 종료 안내 페이지 import
 
 function AppRouter() {
   return (
