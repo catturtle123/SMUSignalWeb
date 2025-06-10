@@ -20,9 +20,9 @@ function MainPage() {
   const token = getCookie("authToken");
   const bearerToken = `Bearer ${token}`;
 
-  const [instaId, setInstaId] = useState("...");
+  const [instaId] = useState("...");
   const [rerollCount, setRerollCount] = useState(0);
-  const [referralCode, setReferralCode] = useState("...");
+  const [referralCode] = useState("...");
   const [inputCode, setInputCode] = useState("");
   const [codeMessage, setCodeMessage] = useState("");
   const [codeColor, setCodeColor] = useState("#B4A5FE");
