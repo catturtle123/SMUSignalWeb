@@ -157,7 +157,7 @@ function MainPage() {
       await axios.patch(url, body, { headers: { Authorization: bearerToken } });
       setCodeMessage(isReferral ? "추천인 코드가 적용되었습니다." : "시리얼 코드가 적용되었습니다.");
       setCodeColor("#664BFF");
-      await fetchReroll();
+      // await fetchReroll();
     } catch (error: unknown) {
       const axiosError = error as AxiosError<{ message: string }>;
       const msg = axiosError.response?.data?.message || "오류 발생";
