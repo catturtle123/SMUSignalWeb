@@ -276,6 +276,8 @@ const LoginPage: React.FC = () => {
         // 기타 에러(네트워크 등등)
         console.error("인증 코드 검증 실패:", error.message);
       }
+    } finally {
+      navigate("/signup");
     }
   };
 

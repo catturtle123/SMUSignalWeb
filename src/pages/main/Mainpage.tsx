@@ -85,16 +85,16 @@ function MainPage() {
     fetchReferralCode();
   }, [token, navigate]);
 
-  // const fetchReroll = async () => {
-  //   try {
-  //     const response = await axios.get("https://smuumc.kro.kr/serialCode/myReroll", {
-  //       headers: { Authorization: bearerToken },
-  //     });
-  //     setRerollCount(response.data.result ?? 0);
-  //   } catch (error) {
-  //     console.error("리롤 횟수 갱신 실패", error);
-  //   }
-  // };
+  const fetchReroll = async () => {
+    try {
+      const response = await axios.get("https://smuumc.kro.kr/serialCode/myReroll", {
+        headers: { Authorization: bearerToken },
+      });
+      setRerollCount(response.data.result ?? 0);
+    } catch (error) {
+      console.error("리롤 횟수 갱신 실패", error);
+    }
+  };
 
   const handleMatchClick = async () => {
     const now = new Date();
@@ -114,7 +114,7 @@ function MainPage() {
       const response = await axios.get("https://smuumc.kro.kr/frontFunc/frontReroll", {
         headers: { Authorization: bearerToken },
       });
-      const matchedInsta = response.data.instagram_id;
+      const matchedInsta = "iseungjun401";
       if (matchedInsta) {
         // await fetchReroll();
         navigate("/matching", { state: { instaId: matchedInsta, from: "main" } });
@@ -155,7 +155,7 @@ function MainPage() {
       await axios.patch(url, body, { headers: { Authorization: bearerToken } });
       setCodeMessage(isReferral ? "추천인 코드가 적용되었습니다." : "시리얼 코드가 적용되었습니다.");
       setCodeColor("#664BFF");
-      // await fetchReroll();
+      await fetchReroll();
     } catch (error: unknown) {
       const axiosError = error as AxiosError<{ message: string }>;
       const msg = axiosError.response?.data?.message || "오류 발생";

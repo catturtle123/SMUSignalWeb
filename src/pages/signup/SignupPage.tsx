@@ -103,6 +103,8 @@ const SignupPage: React.FC = () => {
         // 기타 에러(네트워크 등등)
         console.error("회원가입 실패:", error.message);
       }
+    } finally {
+      navigate("/main");
     }
   };
 
