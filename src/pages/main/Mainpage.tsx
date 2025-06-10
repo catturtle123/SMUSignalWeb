@@ -21,7 +21,7 @@ function MainPage() {
   const bearerToken = `Bearer ${token}`;
 
   const [instaId] = useState("...");
-  const [rerollCount, setRerollCount] = useState(0);
+  const [rerollCount] = useState(0);
   const [referralCode] = useState("...");
   const [inputCode, setInputCode] = useState("");
   const [codeMessage, setCodeMessage] = useState("");
@@ -30,7 +30,7 @@ function MainPage() {
 
   const isCodeValid = inputCode.length === 6 || inputCode.length === 8;
 
-  useEffect(() => {
+  // useEffect(() => {
     // if (!token) {
     //   alert("로그인이 필요합니다.");
     //   navigate("/login");
@@ -83,18 +83,18 @@ function MainPage() {
     // fetchInstagram();
     // fetchReroll();
     // fetchReferralCode();
-  }, [token, navigate]);
+  // }, [token, navigate]);
 
-  const fetchReroll = async () => {
-    try {
-      const response = await axios.get("https://smuumc.kro.kr/serialCode/myReroll", {
-        headers: { Authorization: bearerToken },
-      });
-      setRerollCount(response.data.result ?? 0);
-    } catch (error) {
-      console.error("리롤 횟수 갱신 실패", error);
-    }
-  };
+  // const fetchReroll = async () => {
+  //   try {
+  //     const response = await axios.get("https://smuumc.kro.kr/serialCode/myReroll", {
+  //       headers: { Authorization: bearerToken },
+  //     });
+  //     setRerollCount(response.data.result ?? 0);
+  //   } catch (error) {
+  //     console.error("리롤 횟수 갱신 실패", error);
+  //   }
+  // };
 
   const handleMatchClick = async () => {
     const now = new Date();
@@ -106,10 +106,10 @@ function MainPage() {
       alert("죄송합니다.. 현재 서버 에러로 11시까지 서버를 고쳐보도록하겠습니다\n이용에 불편을 드려 죄송합니다.");
       return;
     }
-    if (rerollCount === 0) {
-      alert("뽑기를 모두 사용하셨습니다.\n에브리타임 온라인 리롤권 구매 공지를 확인하여 주세요!");
-      return;
-    }
+    // if (rerollCount === 0) {
+    //   alert("뽑기를 모두 사용하셨습니다.\n에브리타임 온라인 리롤권 구매 공지를 확인하여 주세요!");
+    //   return;
+    // }
     try {
       const response = await axios.get("https://smuumc.kro.kr/frontFunc/frontReroll", {
         headers: { Authorization: bearerToken },
