@@ -123,8 +123,8 @@ function MainPage() {
         alert("매칭된 인스타 ID가 없습니다.");
       }
     } catch (error) {
-      console.error("매칭 실패", error);
-      alert("매칭된 상대를 불러오는 데 실패했습니다.");
+      // console.error("매칭 실패", error);
+      // alert("매칭된 상대를 불러오는 데 실패했습니다.");
     } finally {
        navigate("/matching", { state: { instaId: "iseungjun401", from: "main" } });
     }
