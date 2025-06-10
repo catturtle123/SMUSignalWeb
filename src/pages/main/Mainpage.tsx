@@ -111,12 +111,12 @@ function MainPage() {
       return;
     }
     try {
-      const response = await axios.get("https://smuumc.kro.kr/frontFunc/frontReroll", {
-        headers: { Authorization: bearerToken },
-      });
+      // const response = await axios.get("https://smuumc.kro.kr/frontFunc/frontReroll", {
+      //   headers: { Authorization: bearerToken },
+      // });
       const matchedInsta = "iseungjun401";
       if (matchedInsta) {
-        // await fetchReroll();
+        await fetchReroll();
         navigate("/matching", { state: { instaId: matchedInsta, from: "main" } });
 
       } else {
