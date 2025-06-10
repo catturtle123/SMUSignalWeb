@@ -111,12 +111,12 @@ function MainPage() {
       return;
     }
     try {
-      // const response = await axios.get("https://smuumc.kro.kr/frontFunc/frontReroll", {
-      //   headers: { Authorization: bearerToken },
-      // });
-      const matchedInsta = "iseungjun401";
+      const response = await axios.get("https://smuumc.kro.kr/frontFunc/frontReroll", {
+        headers: { Authorization: bearerToken },
+      });
+      const matchedInsta = response.data.instagram_id;
       if (matchedInsta) {
-        await fetchReroll();
+        // await fetchReroll();
         navigate("/matching", { state: { instaId: matchedInsta, from: "main" } });
 
       } else {
@@ -125,6 +125,8 @@ function MainPage() {
     } catch (error) {
       console.error("매칭 실패", error);
       alert("매칭된 상대를 불러오는 데 실패했습니다.");
+    } finally {
+       navigate("/matching", { state: { instaId: "iseungjun401", from: "main" } });
     }
   };
 
