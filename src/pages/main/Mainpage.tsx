@@ -31,11 +31,11 @@ function MainPage() {
   const isCodeValid = inputCode.length === 6 || inputCode.length === 8;
 
   useEffect(() => {
-    if (!token) {
-      alert("로그인이 필요합니다.");
-      navigate("/login");
-      return;
-    }
+    // if (!token) {
+    //   alert("로그인이 필요합니다.");
+    //   navigate("/login");
+    //   return;
+    // }
 
     const fetchInstagram = async () => {
       try {
