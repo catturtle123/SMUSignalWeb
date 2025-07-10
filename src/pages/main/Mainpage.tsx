@@ -1,4 +1,4 @@
-import { useEffect, useState, FormEvent, useRef } from "react";
+import { useState, FormEvent } from "react";
 import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import ghost from "../../assets/ghost.svg";
@@ -20,81 +20,81 @@ function MainPage() {
   const token = getCookie("authToken");
   const bearerToken = `Bearer ${token}`;
 
-  const [instaId, setInstaId] = useState("...");
-  const [rerollCount, setRerollCount] = useState(0);
-  const [referralCode, setReferralCode] = useState("...");
+  const [instaId] = useState("testInsta");
+  const [rerollCount] = useState(0);
+  const [referralCode] = useState("ewKeighdl");
   const [inputCode, setInputCode] = useState("");
   const [codeMessage, setCodeMessage] = useState("");
   const [codeColor, setCodeColor] = useState("#B4A5FE");
-  const hasAlertedRef = useRef(false);
+  // const hasAlertedRef = useRef(false);
 
   const isCodeValid = inputCode.length === 6 || inputCode.length === 8;
 
-  useEffect(() => {
-    if (!token) {
-      alert("로그인이 필요합니다.");
-      navigate("/login");
-      return;
-    }
+  // useEffect(() => {
+    // if (!token) {
+    //   alert("로그인이 필요합니다.");
+    //   navigate("/login");
+    //   return;
+    // }
 
-    const fetchInstagram = async () => {
-      try {
-        const response = await axios.get("https://smuumc.kro.kr/user/getMyIns", {
-          headers: { Authorization: bearerToken },
-        });
-        const id = response.data.result || "unknown";
-        const trimmed = id.length > 7 ? id.slice(0, 7) + "..." : id;
-        setInstaId(trimmed);
-      } catch (error) {
-        console.error("인스타 ID 불러오기 실패", error);
-        setInstaId("unknown");
-      }
-    };
+    // const fetchInstagram = async () => {
+    //   try {
+    //     const response = await axios.get("https://smuumc.kro.kr/user/getMyIns", {
+    //       headers: { Authorization: bearerToken },
+    //     });
+    //     const id = response.data.result || "unknown";
+    //     const trimmed = id.length > 7 ? id.slice(0, 7) + "..." : id;
+    //     setInstaId(trimmed);
+    //   } catch (error) {
+    //     console.error("인스타 ID 불러오기 실패", error);
+    //     setInstaId("unknown");
+    //   }
+    // };
 
-    const fetchReroll = async () => {
-      try {
-        const response = await axios.get("https://smuumc.kro.kr/serialCode/myReroll", {
-          headers: { Authorization: bearerToken },
-        });
-        const count = response.data.result ?? 0;
-        setRerollCount(count);
-        if (count === 0 && !hasAlertedRef.current) {
-          window.alert("뽑기를 모두 사용하셨습니다.\n에브리타임 온라인 리롤권 구매 공지를 확인하여 주세요!");
-          hasAlertedRef.current = true;
-        }
-      } catch (error) {
-        console.error("리롤 횟수 불러오기 실패", error);
-        setRerollCount(0);
-      }
-    };
+    // const fetchReroll = async () => {
+    //   try {
+    //     // const response = await axios.get("https://smuumc.kro.kr/serialCode/myReroll", {
+    //     //   headers: { Authorization: bearerToken },
+    //     // });
+    //     // const count = response.data.result ?? 0;
+    //     // setRerollCount(count);
+    //     // if (count === 0 && !hasAlertedRef.current) {
+    //     //   window.alert("뽑기를 모두 사용하셨습니다.\n에브리타임 온라인 리롤권 구매 공지를 확인하여 주세요!");
+    //     //   hasAlertedRef.current = true;
+    //     // }
+    //   } catch (error) {
+    //     console.error("리롤 횟수 불러오기 실패", error);
+    //     setRerollCount(0);
+    //   }
+    // };
 
-    const fetchReferralCode = async () => {
-      try {
-        const response = await axios.get("https://smuumc.kro.kr/referral/getMyReferralCode", {
-          headers: { Authorization: bearerToken },
-        });
-        setReferralCode(response.data.result || "없음");
-      } catch (error) {
-        console.error("추천인 코드 불러오기 실패", error);
-        setReferralCode("없음");
-      }
-    };
+    // const fetchReferralCode = async () => {
+    //   try {
+    //     const response = await axios.get("https://smuumc.kro.kr/referral/getMyReferralCode", {
+    //       headers: { Authorization: bearerToken },
+    //     });
+    //     setReferralCode(response.data.result || "없음");
+    //   } catch (error) {
+    //     console.error("추천인 코드 불러오기 실패", error);
+    //     setReferralCode("없음");
+    //   }
+    // };
 
-    fetchInstagram();
-    fetchReroll();
-    fetchReferralCode();
-  }, [token, navigate]);
+    // fetchInstagram();
+    // fetchReroll();
+    // fetchReferralCode();
+  // }, [token, navigate]);
 
-  const fetchReroll = async () => {
-    try {
-      const response = await axios.get("https://smuumc.kro.kr/serialCode/myReroll", {
-        headers: { Authorization: bearerToken },
-      });
-      setRerollCount(response.data.result ?? 0);
-    } catch (error) {
-      console.error("리롤 횟수 갱신 실패", error);
-    }
-  };
+  // const fetchReroll = async () => {
+  //   try {
+  //     const response = await axios.get("https://smuumc.kro.kr/serialCode/myReroll", {
+  //       headers: { Authorization: bearerToken },
+  //     });
+  //     setRerollCount(response.data.result ?? 0);
+  //   } catch (error) {
+  //     console.error("리롤 횟수 갱신 실패", error);
+  //   }
+  // };
 
   const handleMatchClick = async () => {
     const now = new Date();
@@ -106,10 +106,10 @@ function MainPage() {
       alert("죄송합니다.. 현재 서버 에러로 11시까지 서버를 고쳐보도록하겠습니다\n이용에 불편을 드려 죄송합니다.");
       return;
     }
-    if (rerollCount === 0) {
-      alert("뽑기를 모두 사용하셨습니다.\n에브리타임 온라인 리롤권 구매 공지를 확인하여 주세요!");
-      return;
-    }
+    // if (rerollCount === 0) {
+    //   alert("뽑기를 모두 사용하셨습니다.\n에브리타임 온라인 리롤권 구매 공지를 확인하여 주세요!");
+    //   return;
+    // }
     try {
       const response = await axios.get("https://smuumc.kro.kr/frontFunc/frontReroll", {
         headers: { Authorization: bearerToken },
@@ -123,8 +123,10 @@ function MainPage() {
         alert("매칭된 인스타 ID가 없습니다.");
       }
     } catch (error) {
-      console.error("매칭 실패", error);
-      alert("매칭된 상대를 불러오는 데 실패했습니다.");
+      // console.error("매칭 실패", error);
+      // alert("매칭된 상대를 불러오는 데 실패했습니다.");
+    } finally {
+       navigate("/matching", { state: { instaId: "iseungjun401", from: "main" } });
     }
   };
 
@@ -155,7 +157,7 @@ function MainPage() {
       await axios.patch(url, body, { headers: { Authorization: bearerToken } });
       setCodeMessage(isReferral ? "추천인 코드가 적용되었습니다." : "시리얼 코드가 적용되었습니다.");
       setCodeColor("#664BFF");
-      await fetchReroll();
+      // await fetchReroll();
     } catch (error: unknown) {
       const axiosError = error as AxiosError<{ message: string }>;
       const msg = axiosError.response?.data?.message || "오류 발생";
